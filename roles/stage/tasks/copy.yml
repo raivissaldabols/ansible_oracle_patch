@@ -1,0 +1,21 @@
+- name: Check if patch exists {{ stage_patch.number }} locally - will download only if not existing
+  find:
+    paths: ../patch_storage/
+    patterns: "p{{ stage_patch.number }}*{{ stage_patch.mos_regexp }}*"
+  register: info
+  delegate_to: localhost
+
+- debug:
+    var: info.files.0.path
+
+- name: Copy patch "{{ info.files.0.path }}" to {{ target_stage_path }}
+  ansible.builtin.copy:
+    src: "{{ info.files.0.path }}"
+    dest: "{{ target_stage_path }}"
+    owner: "{{ target_os_user }}"
+    group: "{{ target_os_group }}"
+    mode: '0644'
+
+- name: unzip in target if required - {{ stage_patch.require_unzip }}
+  ansible.builtin.command: "{{ target_unzip }} -qo {{ target_stage_path }}/p{{ stage_patch.number }}*{{ stage_patch.mos_regexp }}* -d {{ target_stage_path }}"
+  when: "{{ stage_patch.require_unzip }} == True"

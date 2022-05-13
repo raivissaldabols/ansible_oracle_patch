@@ -1,0 +1,28 @@
+---
+- name: "Load global variables if present"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "../../../vars/global.yml"
+      skip: True
+
+- name: "Load {{ env }} Envionment variables if present"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "../../../vars/{{ env }}/global.yml"
+      skip: True
+
+- name: "Load {{ target }} Database variables if present"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "../../../vars/{{ env }}/{{ target }}.yml"
+      skip: True
+#
+#- name: "Load {{ stackInstName }} instance-specific variables if present"
+#  include_vars: "{{ item }}"
+#  with_first_found:
+#    - files:
+#        - "../../../vars/{{ stackEnv }}/{{ stackService }}/{{ stackInstName }}.yml"
+#      skip: True

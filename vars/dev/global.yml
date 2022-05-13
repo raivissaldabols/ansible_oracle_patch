@@ -1,0 +1,5 @@
+# DEV env globals
+
+target_stage_path: /home/oracle/patches
+target_os_user: oracle
+target_os_group: dba

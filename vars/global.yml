@@ -1,0 +1,8 @@
+# mos details
+mos_user: saldabols@pythian.com
+mos_pass: mL9SBePL63eKAPsX
+mos_platform: 226P
+mos_regexp: ''
+
+# unix command availability
+target_unzip: /usr/bin/unzip
