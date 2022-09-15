@@ -1,5 +1,0 @@
-# invetory hosts format
-[dev-ora-db]
-HOL_172.16.173.10 ansible_ssh_host=172.16.173.10 ansible_user=oracle ansible_password=oracle
-[dev-ora-app]
-HOL_172.16.173.10 ansible_ssh_host=172.16.173.10 ansible_user=oracle 

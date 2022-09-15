@@ -2,3 +2,4 @@
 - hosts: all
   roles:
     - role: setvars
+    - role: download_patches

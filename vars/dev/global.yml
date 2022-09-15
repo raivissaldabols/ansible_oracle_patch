@@ -1,5 +1,4 @@
-# DEV env globals
+# This file contains global DEV variables
 
-target_stage_path: /home/oracle/patches
-target_os_user: oracle
-target_os_group: dba
+soft_user: oracle
+soft_group: dba

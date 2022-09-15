@@ -1,28 +1,29 @@
 ---
-- name: "Load global variables if present"
+- name: "Load global variables if present for Customer"
   include_vars: "{{ item }}"
   with_first_found:
     - files:
         - "../../../vars/global.yml"
       skip: True
 
-- name: "Load {{ env }} Envionment variables if present"
+- name: "Load global variables if present for Environment"
   include_vars: "{{ item }}"
   with_first_found:
     - files:
         - "../../../vars/{{ env }}/global.yml"
       skip: True
 
-- name: "Load {{ target }} Database variables if present"
+- name: "Load target variables if present for Oracle Home"
   include_vars: "{{ item }}"
   with_first_found:
     - files:
         - "../../../vars/{{ env }}/{{ target }}.yml"
       skip: True
-#
-#- name: "Load {{ stackInstName }} instance-specific variables if present"
-#  include_vars: "{{ item }}"
-#  with_first_found:
-#    - files:
-#        - "../../../vars/{{ stackEnv }}/{{ stackService }}/{{ stackInstName }}.yml"
-#      skip: True
+
+- name: "Load Patching Scenario / Cycle"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "../../../cycles/{{ cycle }}.yml"
+      skip: True
+

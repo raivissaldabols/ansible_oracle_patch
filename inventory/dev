@@ -1,16 +1,7 @@
-# vault example using Yaml format
-# vault pass: qwaszx
-# https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
+# invetory hosts format
+[machines]
+box1 ansible_ssh_host=192.168.56.102 ansible_user=raivis ansible_password=qwaszx
+box2 ansible_ssh_host=192.168.56.102 ansible_user=raivis ansible_password=qwaszx
 
-all:
-    hosts:
-        dev-ora-db:
-            ansible_ssh_host: 172.16.173.10
-            ansible_user: oracle 
-            ansible_password: !vault |
-                            $ANSIBLE_VAULT;1.1;AES256
-                            31616431666432383839613533613264383561353438366131656566663966633331333464363533
-                            6265303565313562353432613562393731363236636134630a353861336364313761313336393636
-                            36643435613532613062626365613734646234613465323462303037333130643563363138393830
-                            6231633362373061350a343766323135663165633963396136633833336537343062633632356163
-                            6562
+[aws]
+aws1 ansible_ssh_host=3.73.118.153 ansible_user=ansible ansible_ssh_private_key_file="vars/keys/ansible.pem"

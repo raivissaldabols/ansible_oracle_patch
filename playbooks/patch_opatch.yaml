@@ -1,7 +1,0 @@
-# Includes all roles related to host setup
-- hosts: all
-  # become: yes (if connected user need sudo su - )
-  roles:
-#loads variables as per hostname.yml
-    - role: setvars
-    - role: patch_opatch
