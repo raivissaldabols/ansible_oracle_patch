@@ -1,4 +1,12 @@
 # This file contains global Client variables
 
-local_stage: /tmp
-remote_stage: /tmp
+# patch staging area | note remote_stage can be owerwritten
+local_stage: ../stage_dir/
+remote_stage: ~/stage/
+
+# logging
+local_log: ../log_dir/
+
+# mos
+mos_user: saldabols@pythian.com
+mos_pass: ***

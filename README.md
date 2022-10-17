@@ -9,11 +9,12 @@
 
 ## run example:
 # local VM ones with user/password
-ansible-playbook playbooks/connect.yml -i inventory/dev -l box1 --extra-vars "env=dev target=rdbms cycle=2022_RDBMS_PSU"
+ansible-playbook playbooks/connect.yml -i inventory/dev -l aws1 --extra-vars "env=dev target=dev_rdbms cycle=2022_RDBMS_PSU"
 
 # AWS instance with key
-ansible-playbook playbooks/connect.yml -i inventory/dev -l aws1 --extra-vars "env=dev target=rdbms cycle=2022_RDBMS_PSU"
+ansible-playbook playbooks/connect.yml -i inventory/dev -l aws1 --extra-vars "env=dev target=dev_rdbms cycle=2022_RDBMS_PSU"
 
+ - -v will add output 
 
 ## must have items to resolve before move on:
 - logging: need to have execution details on server + also on ansible host but outside ansible home (so not to move into GIT if pushed)

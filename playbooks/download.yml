@@ -1,0 +1,6 @@
+
+# Simple connect playbook to verify setup
+- hosts: all
+  roles:
+    - role: setvars
+    - role: download

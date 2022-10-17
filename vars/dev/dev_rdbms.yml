@@ -2,5 +2,5 @@
 
 # ORACLE_HOME
 
-oracle_home: /u01/oracle/19.1.0
+oracle_home: /u01/oracle
 oracle_base: /u01/oracle

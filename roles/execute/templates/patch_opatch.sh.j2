@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# this is anisble patching framework created file
+# roles/template/patch_opatch.sh
+
+# setting variables / replaced by ansible variables
+oracle_home={{ oracle_home }}
+
+# code
+date
+ls -l 
+cd ${oracle_home}
+zip -v OPatch.zip OPatch
+mkdir -p ${oracle_home}/OPatch
+date

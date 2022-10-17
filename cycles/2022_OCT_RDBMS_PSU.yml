@@ -1,0 +1,15 @@
+### Cycle describes patching order 
+### need ot have 2 lists: one will be downlaod / stage list
+
+mos_download:
+   -  name: Opatch
+      number: 6880880
+      mos_regexp: 112
+      mos_platform: 226P
+   -  name: MERGE ON Database RU 19.11.0.0.0 OF 17777718 23125587 28318139 31424070 32042352
+      number: 32933575
+      mos_regexp: 
+      mos_platform: 226P
+
+# Second list will be describing apply/rollback
+
