@@ -32,4 +32,4 @@
 - name: Print return information from the previous task
   ansible.builtin.debug:
     var: reg_output.stdout_lines
-    verbosity: 0
+    verbosity: 1

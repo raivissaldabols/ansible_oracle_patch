@@ -1,5 +1,6 @@
+
 # Simple connect playbook to verify setup
 - hosts: all
   roles:
     - role: setvars
-    - role: download_patches
+    - role: 19c_rdbms_patch_opatch

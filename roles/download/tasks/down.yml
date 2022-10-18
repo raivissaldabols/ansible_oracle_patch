@@ -17,7 +17,7 @@
 
 - debug:
     var: info
-    verbosity: 0
+    verbosity: 1
 
 
 - name: Download patch {{ mos_download.number  }} from MOS using getMOSPatch.jar

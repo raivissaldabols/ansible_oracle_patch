@@ -1,0 +1,9 @@
+# Simple connect playbook to verify setup
+- hosts: all
+  roles:
+    - role: setvars
+    - role: download
+    - role: stop
+    - role: 19c_rdbms_patch_opatch
+    - role: 19c_rdbms_patch_oh
+    - role: startup

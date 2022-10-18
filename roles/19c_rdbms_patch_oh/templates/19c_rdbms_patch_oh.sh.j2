@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# this is anisble patching framework created file
+# roles/template/patch_opatch.sh
+
+# setting variables / replaced by ansible variables
+
+export ORACLE_SID={{ oracle_sid }}
+export ORACLE_BASE={{ oracle_base }}
+export ORACLE_HOME={{ oracle_home }}
+export LISTENER={{ listener_name }}
+export STAGE_DIR={{ remote_stage }}/{{ cycle }} ## note staging through cycles
+
+# extra variables
+export PATH=$ORACLE_HOME/bin:$PATH
+
+echo "## Patching 19c: database : ${ORACLE_SID} on $(hostname)"
+date
+
+echo "## OPatch checks"
+$ORACLE_HOME/OPatch/opatch version
+$ORACLE_HOME/OPatch/opatch lspatches
+$ORACLE_HOME/OPatch/opatch lsinv | grep applied
+
+# check if OH busy
+echo " ## exit if Oracle running"
+if [[ $(fuser $ORACLE_HOME/bin/oracle) != '' ]]; then 
+	echo "$ORACLE_HOME: seems to be up - existing now"; 
+	exit 1;
+fi
+
+## Rollback
+echo ""
+echo "## Rollback patches per list"
+{% for item in db_19c_rdbms_rollback_list %}
+export patch={{ item.number }}
+echo "## rollback patch: ${patch}"
+$ORACLE_HOME/OPatch/opatch rollback -id ${patch} -silent
+{% endfor %}
+
+echo ""
+echo "## Apply patches per list"
+{% for item in db_19c_rdbms_apply_list %}
+export patch={{ item.number }}
+export patch_pattern={{ item.mos_regexp }}
+echo "## apply patch: ${patch}: from: ${STAGE_DIR}/p${patch}*${patch_pattern}*.zip"
+$ORACLE_HOME/OPatch/opatch apply -silent ${STAGE_DIR}/p${patch}*${patch_pattern}*.zip
+{% endfor %}
+
+echo "## OPatch checks"
+$ORACLE_HOME/OPatch/opatch lsinv | grep applied
+
+echo "## task completed: Patching 19c:  database : ${ORACLE_SID} on $(hostname)"
+date

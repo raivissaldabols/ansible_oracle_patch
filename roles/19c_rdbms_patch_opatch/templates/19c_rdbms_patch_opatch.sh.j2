@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# this is anisble patching framework created file
+# roles/template/patch_opatch.sh
+
+# setting variables / replaced by ansible variables
+
+export ORACLE_SID={{ oracle_sid }}
+export ORACLE_BASE={{ oracle_base }}
+export ORACLE_HOME={{ oracle_home }}
+export LISTENER={{ listener_name }}
+export STAGE_DIR={{ remote_stage }}/{{ cycle }} ## note staging through cycles
+
+{% for item in db_19c_rdbms_opatch %}
+export patch={{ item.number }}
+export patch_pattern={{ item.mos_regexp }}
+{% endfor %}
+
+# extra variables
+export PATH=$ORACLE_HOME/bin:$PATH
+
+echo "## Patching 19c OPATCH: database : ${ORACLE_SID} on $(hostname)"
+date
+
+cd $ORACLE_HOME/
+curr_date=$(date '+%Y%m%d_%H%M%S')
+echo "## listing existong OPatch"
+ls -l | grep OPatch
+
+echo "## OPatch version"
+OPatch/opatch version
+
+echo "## Archive OPatch"
+mv -v OPatch OPatch_${curr_date}
+zip -qr OPatch_${curr_date}.zip OPatch_${curr_date}
+rm -Rf OPatch_${curr_date}
+
+echo "## Stage new OPatch"
+ls -l ${STAGE_DIR}/p${patch}*${patch_pattern}*.zip
+unzip -q ${STAGE_DIR}/p${patch}*${patch_pattern}*.zip -d $ORACLE_HOME
+
+echo "## OPatch version"
+OPatch/opatch version
+ls -l | grep OPatch
+
+
+echo "## task completed: Patching 19c OPATCH: database : ${ORACLE_SID} on $(hostname)"
+date
