@@ -49,6 +49,4 @@
 - name: "List files in {{ local_stage }}"
   debug:
     msg: "{{ zip_files.files|map(attribute='path') }}"
-  #
-
-
+  
