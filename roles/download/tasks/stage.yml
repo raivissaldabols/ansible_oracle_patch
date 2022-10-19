@@ -1,0 +1,32 @@
+- name: Creates LOG directory
+  file:
+    path: "{{ remote_logs  }}"
+    state: directory
+    mode: 0777
+
+- name: Creates STAGE directory
+  file:
+    path: "{{ remote_stage }}"
+    state: directory 
+    mode: 0777
+
+- name: Creates bin directory
+  file:
+    path: "{{ remote_bin }}"
+    state: directory 
+    mode: 0777
+
+- name: Stage Patches to Target
+  ansible.builtin.copy:
+    src: "../{{ local_stage }}/{{ cycle }}"
+    dest: "{{ remote_stage }}"
+    #owner: root
+    #group: root
+    mode: '0644'
+    backup: yes
+  register: info
+
+- name: Print return information from the previous task
+  ansible.builtin.debug:
+    var: info
+    verbosity: 0

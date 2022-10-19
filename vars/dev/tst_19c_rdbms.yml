@@ -1,0 +1,8 @@
+# this variable file contains all the particular system specifics
+
+# ORACLE_HOME
+
+oracle_home: /u01/app/oracle/product/19.0.0/dbhome_1
+oracle_base: /u01/app/oracle
+oracle_sid: TST
+listener_name: LISTENER

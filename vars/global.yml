@@ -1,8 +1,8 @@
 # This file contains global Client variables
 
-# patch staging area | note remote_stage can be owerwritten
-local_stage: ../stage_dir/
-remote_stage: ~/stage/
+# patch staging area on local server (used for download patches)
+local_stage: ../stage_dir # must not end with / (copy issues)
+remote_stage: ~/stage     # must note end with / (copy issues)
 
 # logging
 local_log: ../log_dir/

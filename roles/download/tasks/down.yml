@@ -17,10 +17,6 @@
   loop_control:
     label: "{{ item.number }}"
 
-# - name: "Show info results"
-#   debug: 
-#     msg: "{{ info.results }}"
-
 - name: "Show existing Patches"
   debug: 
     msg: "Patch {{ item.files|map(attribute='path') }} EXIST in {{ local_stage }}"
