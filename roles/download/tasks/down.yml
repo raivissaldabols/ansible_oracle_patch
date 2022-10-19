@@ -37,6 +37,18 @@
   loop: "{{ info.results }}"
   loop_control:
     label: "{{ item.item.number }}"
+  no_log: true
+    
+- ansible.builtin.find:
+    paths: ../{{ local_stage }}/{{ cycle }}
+    patterns: "p*zip"
+    file_type: file
+  delegate_to: localhost
+  register: zip_files
 
+- name: "List files in {{ local_stage }}"
+  debug:
+    msg: "{{ zip_files.files|map(attribute='path') }}"
+  #
 
 

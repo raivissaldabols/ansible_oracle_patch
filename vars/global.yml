@@ -8,5 +8,4 @@ remote_stage: ~/stage/
 local_log: ../log_dir/
 
 # mos
-mos_user: asharma@pythian.com
-mos_pass: 
+# Moved to mos_creds.yml
