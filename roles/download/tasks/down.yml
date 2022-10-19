@@ -7,32 +7,36 @@
     mode: 0777
   delegate_to: localhost
 
-- name: Check if patch exists {{ mos_download.number }} locally - will download only if not existing
+- name: "Check if patches exists locally - will download only if not existing"
   ansible.builtin.find:
     paths: ../{{ local_stage }}/{{ cycle }}
     patterns: "p{{ item.number }}*{{ item.mos_regexp }}*"
   register: info
   delegate_to: localhost
   loop: "{{ mos_download | flatten }}"
+  loop_control:
+    label: "{{ item.number }}"
 
-- debug:
-    var: info
-    verbosity: 0
+# - name: "Show info results"
+#   debug: 
+#     msg: "{{ info.results }}"
 
+- name: "Show existing Patches"
+  debug: 
+    msg: "Patch {{ item.files|map(attribute='path') }} EXIST in {{ local_stage }}"
+  when: item.matched > 0
+  loop: "{{ info.results }}"
+  loop_control:
+    label: "{{ item.item.number }}"
 
-- name: Download patch {{ mos_download.number  }} from MOS using getMOSPatch.jar
-  #ansible.builtin.command: java -jar ../download/getMOSPatch.jar patch={{ item.number }}  MOSUser={{ mos_user }} MOSPass={{ mos_pass }} platform={{ item.mos_platform }} regexp=.*{{ item.mos_regexp }}.* download=all
-  ansible.builtin.command: java -jar ../roles/download/files/getMOSPatch.jar patch={{ item.number }}  platform={{ item.mos_platform }} regexp=.*{{ item.mos_regexp }}.* download=all MOSUser={{ mos_user }} MOSPass={{ mos_pass }} stagedir=../{{ local_stage }}/{{ cycle }}
-  #ansible.builtin.command: "pwd"
-  register: out1
+- name: "Downloading Missing Patch"
+  ansible.builtin.command: java -jar ../roles/download/files/getMOSPatch.jar patch={{ item.item.number }}  platform={{ item.item.mos_platform }} regexp=.*{{ item.item.mos_regexp }}.* download=all MOSUser={{ mos_user }} MOSPass={{ mos_pass }} stagedir=../{{ local_stage }}/{{ cycle }}
+  when: item.matched == 0
   delegate_to: localhost
-  loop: "{{ mos_download |flatten }}"  
-  when: info.files.0.path is not defined
+  register: out1
+  loop: "{{ info.results }}"
+  loop_control:
+    label: "{{ item.item.number }}"
 
-- debug: 
-    var: out1.stdout_lines
 
-- name: Print return information from the previous task
-  ansible.builtin.debug:
-    var: out1
-    verbosity: 1
+

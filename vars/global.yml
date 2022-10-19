@@ -8,5 +8,5 @@ remote_stage: ~/stage/
 local_log: ../log_dir/
 
 # mos
-mos_user: saldabols@pythian.com
-mos_pass: ***
+mos_user: asharma@pythian.com
+mos_pass: 
