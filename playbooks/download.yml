@@ -1,6 +1,17 @@
 
-# Simple connect playbook to verify setup
+# Simple connect playbook to verify setup# Simple connect playbook to verify setup
 - hosts: all
-  roles:
-    - role: setvars
-    - role: download
+  tasks:
+    - name: SetVars
+      include_role:
+        name: setvars
+
+    - name: Confirm Environment Variables
+      pause:
+        prompt: "Please verify Environment Variables printed above, type yes to confirm"
+      register: confirm_env
+
+    - name: Download Role
+      include_role:
+        name: download
+      when: confirm_env.user_input | bool
