@@ -26,7 +26,13 @@
     backup: yes
   register: info
 
-- name: Print return information from the previous task
-  ansible.builtin.debug:
-    var: info
-    verbosity: 0
+- ansible.builtin.find:
+    paths: "{{ remote_stage }}"
+    patterns: "p*zip"
+    file_type: file
+    recurse: true
+  register: rem_zip_files
+
+- name: "List files in remote staging area {{ remote_stage }}"
+  debug:
+    msg: "{{ rem_zip_files.files|map(attribute='path') }}"
