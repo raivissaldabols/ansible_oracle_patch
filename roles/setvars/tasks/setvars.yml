@@ -6,12 +6,12 @@
         - "../../../vars/global.yml"
       skip: True
 
-# - name: "Load MOS Creds"
-#   include_vars: "{{ item }}"
-#   with_first_found:
-#     - files:
-#         - "../../../vars/mos_creds.yml"
-#       skip: True
+- name: "Load MOS Creds"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "../../../vars/mos_creds.yml"
+      skip: True
 
 - name: "Load global variables if present for Environment"
   include_vars: "{{ item }}"
