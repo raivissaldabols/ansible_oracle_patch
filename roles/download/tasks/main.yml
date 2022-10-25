@@ -1,3 +1,11 @@
-# loads variables
+# load MOS variables
+- name: "Load MOS Creds"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "../vars/mos_creds.yml"
+      skip: True
+
+# Include tasks
 - include_tasks: "down.yml"
 - include_tasks: "stage.yml"
