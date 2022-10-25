@@ -1,0 +1,20 @@
+############################################################################
+##
+## Oracle Patching configuration file
+##
+## Configuration Options
+## =====================
+##
+## PatchLocation         This defines the directory under which patches may
+##                       be located.  Default current directory
+## MOSUser               This defines the My Oracle Support username
+##                       Only used if needed to download the patch
+## MOSPassword           This defines the My Oracle Support password
+##                       Only used if needed to download the patch
+############################################################################
+
+# NOTE: this is ansible generated file
+
+PatchLocation={{ remote_stage }}/{{ cycle }}
+#MOSUser=davies@pythian.com
+#MOSPassword=<password>

@@ -1,0 +1,6 @@
+
+# Simple connect playbook to verify setup
+- hosts: all
+  roles:
+    - role: setvars
+    - role: ld_oracle_patch
