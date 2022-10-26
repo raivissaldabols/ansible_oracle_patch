@@ -6,7 +6,7 @@
     msg:
     - "Local Staging Directory    :  {{ local_stage }}"
     - "Local Logging Directory    :  {{ local_log }}"
-    - "MOS Username               :  {{ mos_user }}"
+    #- "MOS Username               :  {{ mos_user }}"
     - "Oracle software user       :  {{ soft_user }}"
     - "Oracle group               :  {{ soft_group }}"
     - "Remote Staging Directory   :  {{ remote_stage }}"
@@ -17,3 +17,4 @@
     - "Environment                :  {{ env }}"
     - "Target                     :  {{ target }}"
     - "Cycle                      :  {{ cycle }}"
+    - "Target Host Name           :  {{ inventory_hostname }}"
