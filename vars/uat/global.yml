@@ -1,0 +1,8 @@
+# This file contains global UAT variables
+
+soft_user: oracle
+soft_group: dba
+
+remote_stage: /u01/ansible/stage/ # must end with /
+remote_logs: /u01/ansible/logs/
+remote_bin: /u01/ansible/bin/

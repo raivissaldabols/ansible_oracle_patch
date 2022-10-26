@@ -4,23 +4,72 @@
 # NOTE: variable CAN'T start with nuber
 
 mos_download:
-   -  name: Opatch 11g
+# Oracle Database
+   -  name: "Opatch 11g"
       number: 6880880
-      mos_regexp: 112
+      mos_regexp: 122
       mos_platform: 226P
-   -  name: Opatch 19c
-      number: 6880880
-      mos_regexp: 190
+   -  name: "Database PSU 12.1.0.2.220719 Patch 34057742 for UNIX"
+      number: 34057742
+      mos_regexp:
       mos_platform: 226P
-   -  name: MERGE ON Database RU 19.11.0.0.0 OF 17777718 23125587 28318139 31424070 32042352
-      number: 32933575
+   -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
+      number: 34086863
+      mos_regexp:
+      mos_platform: 226P
+   -  name: "JDK7u351Patch 34113570"
+      number: 34113570
+      mos_regexp:
+      mos_platform: 226P
+   -  name: "Perl Patch 33912892"
+      number: 33912892
       mos_regexp: 
       mos_platform: 226P
-   -  name: "APPSST19C: XTTS PDB - TABLE IMPORT/CREATION FAILED WITH ORA-39083 ORA-14334"
-      number: 31424070
-      mos_regexp: 190000
+   -  name: "Oracle JavaVM Component Database PSU - Generic JDBC 12.1.0.2.160719 Patch 23727148"
+      number: 23727148
+      mos_regexp: 
       mos_platform: 226P
+# Oracle EBS Applications
+   -  name: "Patch 34127951: ORACLE APPLICATIONS RELEASE 12.2: CPU PATCH FOR JUL 2022"
+      number: 34127951
+      mos_regexp: 
+      mos_platform: 46P
+   -  name: "Patch 34197137:R12.FWK.C"
+      number: 34197137
+      mos_regexp: 
+      mos_platform: 46P
+   -  name: "Patch 34196316:R12.FWK.C"
+      number: 34196316
+      mos_regexp: 
+      mos_platform: 46P
+   -  name: "Patch 34212478:R12.JTT.C"
+      number: 34212478
+      mos_regexp: 
+      mos_platform: 46P
+   -  name: "Patch 34164667:R12.UMX.C"
+      number: 34164667
+      mos_regexp: 
+      mos_platform: 46P
+   -  name: "Patch 33568131:R12.TXK.C"
+      number: 33568131
+      mos_regexp: 
+      mos_platform: 46P
+   -  name: "Patch 33908216:R12.FWK.C"
+      number: 33908216
+      mos_regexp: 
+      mos_platform: 46P
+   -  name: "Patch 33625264:R12.OWF.C"
+      number: 33625264
+      mos_regexp: 
+      mos_platform: 46P
 
+# RDBMS Check Conflict list
+rdbms_conflict_check_list:
+  - 34057742
+  - 34086863
+  - 34113570
+  - 33912892
+  - 23727148
 
 # Second list will be describing apply/rollback
 db_19c_rdbms_opatch:
@@ -38,3 +87,5 @@ db_19c_rdbms_apply_list:
       number: 31424070
       mos_regexp: 190000
       mos_platform: 226P
+
+

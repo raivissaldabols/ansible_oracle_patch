@@ -17,3 +17,4 @@
     - "Environment                :  {{ env }}"
     - "Target                     :  {{ target }}"
     - "Cycle                      :  {{ cycle }}"
+    - "Target Host Name           :  {{ inventory_hostname }}"

@@ -1,0 +1,11 @@
+# this variable file contains all the particular system specifics
+
+# ORACLE_HOME
+oracle_home: /u02/oracle/vision/12.1.0
+oracle_base: /u02/oracle/vision/12.1.0
+
+# Software Owner
+soft_user: oracle
+soft_group: dba
+
+# TBD : Database version?
