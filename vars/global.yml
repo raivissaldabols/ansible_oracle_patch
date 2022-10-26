@@ -8,4 +8,9 @@ remote_stage: ~/stage     # must note end with / (copy issues)
 local_log: ../log_dir/
 
 # mos
-# Moved to mos_creds.yml
+
+# setting empty vars to avoid pritn vars failures: overrides in lower
+oracle_home: ""
+oracle_base: ""
+soft_user: ""
+soft_group: ""
