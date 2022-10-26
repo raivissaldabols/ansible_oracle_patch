@@ -1,0 +1,5 @@
+
+soft_user: applmgr
+soft_group: dba
+
+env_file: 
