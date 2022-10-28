@@ -1,11 +1,18 @@
 # this variable file contains all the particular system specifics
 
 # ORACLE_HOME
-oracle_home: /u02/oracle/vision/fs2/EBSapps/10.1.2
+oracle_home: 
 oracle_base: /u02/oracle/vision
 
 # Software Owner
 soft_user: applmgr
 soft_group: dba
 
+environment_file: /home/applmgr/EBSapps.env
 # TBD : EBS App version?
+
+# encrypted
+apps_user: apps
+apps_pass: APPS
+sys_pass: manager
+wls_pass: welcome1

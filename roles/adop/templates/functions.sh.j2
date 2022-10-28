@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# this is ebs 12.2 adop functions file
+
+adop_setenv () {
+  # usage: adop_setenv environment_file edition
+ source  ${1} ${2}
+}
+
+adop_status (){
+ # usage: adop_status
+  (echo ${apps_pass}) | adop - status
+}
+
+adop_run_phase (){
+ # usage: adop_run_phase <edition> <phase> <options> 
+ # (echo ${apps_pass}; echo ${sys_pass}; echo ${wls_pass}) | adop phase=${adop_phase} ${adop_options}
+ adop_setenv ${environment_file} ${1}
+ adop_status
+ echo " (echo ${apps_pass}; echo ${sys_pass}; echo ${wls_pass}) | adop phase=${2} ${3}"
+}
+
+jdk_32bit_patch(){
+# usage: jdk_32bit_patch <edition> <phase> <options> 
+date
+echo "######################################################"
+echo "Proceeding with JDK 32bit update"
+
+  patch=$(echo $3 | sed -e 's/patches=//g')
+  echo "${STAGE_DIR}/$patch"
+  adop_setenv ${environment_file} ${1}
+  #adop_status
+  cd $COMMON_TOP/util
+  echo "work in: $(pwd)"
+  $COMMON_TOP/util/jdk32/bin/java -version
+  zip -qr jdk32_${curr_date}.zip jdk32
+  unzip ${STAGE_DIR}/${patch} *.tar.gz # extract only tgz
+  tar xzf jdk-*i586.tar.gz
+  rm -Rf jdk32 jdk-*i586.tar.gz
+  mv jdk1* jdk32
+  $COMMON_TOP/util/jdk32/bin/java -version
+
+echo "EOF: Proceeding with JDK 32bit update"
+echo "---"
+}
+
+jdk_64bit_patch(){
+# usage: jdk_64bit_patch <edition> <phase> <options> 
+date
+echo "######################################################"
+echo "Proceeding with JDK 64bit update"
+
+  patch=$(echo $3 | sed -e 's/patches=//g')
+  echo "${STAGE_DIR}/$patch"
+  adop_setenv ${environment_file} ${1}
+  #adop_status
+  cd $COMMON_TOP/util 
+  echo "work in: $(pwd)" 
+  $COMMON_TOP/util/jdk32/bin/java -version 
+  zip -qr jdk64_${curr_date}.zip jdk64
+  unzip ${STAGE_DIR}/${patch} *x64.tar.gz   # extract only tgz
+  tar xzf jdk-*x64.tar.gz  
+  rm -Rf jdk64 jdk-*x64.tar.gz 
+  mv jdk1* jdk64 
+  $COMMON_TOP/util/jdk32/bin/java -version
+
+echo "EOF: Proceeding with JDK 64bit update"
+echo "---"
+}

@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# source static function
+source {{ remote_bin }}/functions.sh
+
+# need Valet and get form wallet (TO BE UPDATED)
+apps_user={{ apps_user }}
+apps_pass={{ apps_pass }}
+sys_pass={{ sys_pass }}
+wls_pass={{ wls_pass }}
+curr_date=$(date '+%Y%m%d_%H%M%S')
+
+export STAGE_DIR={{ remote_stage }}/{{ cycle }} ## note staging through cycles
+export environment_file={{ environment_file }}
+# generate tasks from adop_patch
+#    - phase_name: prepare
+#      phase_options: ""
+#      fs_edition: run
+
+{% for item in adop_patch %}
+phase_name={{ item.phase_name }}
+phase_options={{ item.phase_options }}
+fs_edition={{ item.fs_edition }}
+
+{% if item.phase_name == "prepare" %}
+echo "ADOP cycle: ${phase_name} ${phase_options}"
+adop_run_phase ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "apply" %}
+echo "ADOP cycle: ${phase_name} ${phase_options}"
+adop_run_phase ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "finalise" %}
+echo "ADOP cycle: ${phase_name} ${phase_options}"
+adop_run_phase ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "cutover" %}
+echo "ADOP cycle: ${phase_name} ${phase_options}"
+adop_run_phase ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "cleanup" %}
+echo "ADOP cycle: ${phase_name} ${phase_options}"
+adop_run_phase ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "fs_clone" %}
+echo "ADOP cycle: ${phase_name} ${phase_options}"
+adop_run_phase ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "actualise" %}
+echo "ADOP cycle: ${phase_name} ${phase_options}"
+adop_run_phase ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "jdk_32bit_patch" %}
+echo "jdk_32bit_patch: ${phase_options} "
+jdk_32bit_patch ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "jdk_64bit_patch" %}
+echo "jdk_64bit_patch: ${phase_options} "
+jdk_64bit_patch ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "wls_bsu_patch" %}
+echo "wls_bsu_patch"
+{% elif item.phase_name == "wls_bsu_rollback" %}
+echo "wls_bsu_rollback"
+{% elif item.phase_name == "ohs_patch" %}
+echo "ohs_patch"
+{% elif item.phase_name == "ohs_rollback" %}
+echo "ohs_rollback"
+{% endif %}
+
+{% endfor %}

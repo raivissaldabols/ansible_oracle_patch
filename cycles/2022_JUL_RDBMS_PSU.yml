@@ -62,6 +62,14 @@ mos_download:
       number: 33625264
       mos_regexp: 
       mos_platform: 46P
+   -  name: "Patch Oracle JDK 7 Update 351"
+      number: 34170410
+      mos_regexp: 
+      mos_platform: 226P
+   -  name: "Patch Oracle JDK 7 Update 351"
+      number: 34170410
+      mos_regexp: 
+      mos_platform: 46P
 
 # RDBMS Check Conflict list
 rdbms_conflict_check_list:
@@ -89,3 +97,33 @@ db_19c_rdbms_apply_list:
       mos_platform: 226P
 
 
+# ADOP
+adop_patch:
+   # - phase_name: prepare
+   #   phase_options: ""
+   #   fs_edition: run
+   # - phase_name: apply
+   #   phase_options: "patches=1234,3245 merge=yes"
+   #   fs_edition: patch
+   - phase_name: jdk_32bit_patch
+     phase_options: "patches=p34170410_170351_LINUX.zip"
+     fs_edition: patch
+   - phase_name: jdk_64bit_patch
+     phase_options: "patches=p34170410_170351_Linux-x86-64.zip"
+     fs_edition: patch
+   # - phase_name: wls_bsu_patch
+   #   phase_options: "patches=1234"
+   #   fs_edition: patch
+   # - phase_name: ohs_patch
+   #   phase_options: "patches=1234"
+   #   fs_edition: patch
+   # - phase_name: finalise
+   #   phase_options: ""
+   #   fs_edition: run
+
+adop_downtime:
+   - phase_name: ebs_stop
+   - phase_name: cutover
+   - phase_name: ebs_start
+   - phase_name: fs_clone
+   - phase_name: clenaup

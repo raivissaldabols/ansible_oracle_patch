@@ -1,0 +1,2 @@
+# Include tasks
+- include_tasks: "adop.yml"

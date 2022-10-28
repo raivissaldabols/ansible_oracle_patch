@@ -61,6 +61,10 @@ ansible-playbook playbooks/execute.yml -i inventory/dev -l aws --extra-vars "env
 Raiviss-MacBook-Pro-2:ansible_oracle_patch raivissaldabols$ cd wrappers/
 Raiviss-MacBook-Pro-2:wrappers raivissaldabols$ sh patch_dev_rdbms.sh
 
+
+# adop example
+time ansible-playbook playbooks/adop.yml -i inventory/uat -l uat_app --extra-vars "env=uat target=ebs122_uat_app cycle=2022_JUL_RDBMS_PSU"
+
 ## to know
 
  - stage direcotry (definded in global.yaml) is outside this ansible playbook home - so pushing to git doesn't push actual patches
