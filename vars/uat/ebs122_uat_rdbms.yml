@@ -8,4 +8,10 @@ oracle_base: /u02/oracle/vision/12.1.0
 soft_user: oracle
 soft_group: dba
 
+# ORACLE_SID
+oracle_sid: UAT
+
+# listener_name
+listener_name: UAT
+
 # TBD : Database version?

@@ -1,31 +1,31 @@
 #!/bin/bash
 
-export ORACLE_SID={{ oracle_sid }}
-export ORACLE_BASE={{ oracle_base }}
-export ORACLE_HOME={{ oracle_home }}
-export LISTENER={{ listener_name }}
-export STAGE_DIR={{ remote_stage }}/{{ cycle }} ## note staging through cycles
+# export ORACLE_SID={{ oracle_sid }}
+# export ORACLE_BASE={{ oracle_base }}
+# export ORACLE_HOME={{ oracle_home }}
+# export LISTENER={{ listener_name }}
+# export STAGE_DIR={{ remote_stage }}/{{ cycle }} ## note staging through cycles
 
 # extra variables
-export PATH=$ORACLE_HOME/bin:$PATH
+export PATH={{ oracle_home }}/bin:$PATH
 
-echo "## Checking Conflicts: database : ${ORACLE_SID} on $(hostname)"
+## Checking Conflicts: database : {{ oracle_sid }} on {{ inventory_hostname }}
 date
 
-echo "## OPatch checks"
-$ORACLE_HOME/OPatch/opatch version
-$ORACLE_HOME/OPatch/opatch lsinv | grep applied
+## OPatch checks
+{{ oracle_home }}/OPatch/opatch version
+{{ oracle_home }}/OPatch/opatch lsinv | grep applied
 
-echo ""
-echo "## Check conflicts with {{ ORACLE_HOME }} per list"
+## Check conflicts with {{ oracle_home }} per list
 {% for item in rdbms_conflict_check_list %}
-export patch={{ item }}
-echo "## Cheking conflict with patch: ${patch}: from: ${STAGE_DIR}/p${patch}*.zip"
-cd ${STAGE_DIR}
-unzip -q p${patch}*.zip
-cd ${patch}
-$ORACLE_HOME/OPatch/opatch prereq CheckConflictAgainstOHWithDetail -ph ./
+cd {{ remote_stage }}/{{ cycle }}
+echo "=========================================================="
+echo "Unzipping Patch {{ item }}"
+unzip -qo p{{ item }}*.zip
+cd {{ item }}
+echo "Checking conflict for patch {{ item }} against {{ oracle_home }}"
+{{ oracle_home }}/OPatch/opatch prereq CheckConflictAgainstOHWithDetail -ph ./
 {% endfor %}
 
-echo "## task Conflict Check completed : ${ORACLE_SID} on $(hostname)"
+## task Conflict Check completed : {{ oracle_sid }} on {{ inventory_hostname }}
 date

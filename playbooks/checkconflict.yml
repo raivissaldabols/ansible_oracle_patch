@@ -1,0 +1,5 @@
+# Playbook to Check patch conflicts
+- hosts: all
+  roles:
+    - role: setvars
+    - role: checkconflict
