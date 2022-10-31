@@ -1,20 +1,15 @@
 #!/bin/bash
+# "{{ ansible_managed }}"
 
-# export ORACLE_SID={{ oracle_sid }}
-# export ORACLE_BASE={{ oracle_base }}
-# export ORACLE_HOME={{ oracle_home }}
-# export LISTENER={{ listener_name }}
-# export STAGE_DIR={{ remote_stage }}/{{ cycle }} ## note staging through cycles
-
-# extra variables
+# Setting Path
 export PATH={{ oracle_home }}/bin:$PATH
 
-## Checking Conflicts: database : {{ oracle_sid }} on {{ inventory_hostname }}
+## Start Time
 date
 
 ## OPatch checks
+echo "Version of opatch binary is:"
 {{ oracle_home }}/OPatch/opatch version
-{{ oracle_home }}/OPatch/opatch lsinv | grep applied
 
 ## Check conflicts with {{ oracle_home }} per list
 {% for item in rdbms_conflict_check_list %}
@@ -27,5 +22,5 @@ echo "Checking conflict for patch {{ item }} against {{ oracle_home }}"
 {{ oracle_home }}/OPatch/opatch prereq CheckConflictAgainstOHWithDetail -ph ./
 {% endfor %}
 
-## task Conflict Check completed : {{ oracle_sid }} on {{ inventory_hostname }}
+## End time
 date

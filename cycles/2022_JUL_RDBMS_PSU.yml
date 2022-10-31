@@ -73,7 +73,7 @@ mos_download:
 
 # RDBMS Check Conflict list
 rdbms_conflict_check_list:
-#  - 34057742
+  - 34057742
   - 34086863
   - 34113570
   - 33912892
@@ -83,7 +83,7 @@ rdbms_conflict_check_list:
 db_19c_rdbms_opatch:
    -  name: Opatch 19c
       number: 6880880
-      mos_regexp: 190
+      mos_regexp: 122
       mos_platform: 226P
 
 db_19c_rdbms_rollback_list:
