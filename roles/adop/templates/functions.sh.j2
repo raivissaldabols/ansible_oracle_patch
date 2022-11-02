@@ -1,6 +1,13 @@
 #!/bin/bash
-
 # this is ebs 12.2 adop functions file
+
+# README:
+# all functions requires 2 global variables set by adop.sh
+#  - STAGE_DIR
+#  - environment_file
+#  - and password
+#
+# all funciton first parameter is edition to execute the function 
 
 adop_setenv () {
   # usage: adop_setenv environment_file edition
@@ -15,9 +22,56 @@ adop_status (){
 adop_run_phase (){
  # usage: adop_run_phase <edition> <phase> <options> 
  # (echo ${apps_pass}; echo ${sys_pass}; echo ${wls_pass}) | adop phase=${adop_phase} ${adop_options}
+
+ date
+ echo "######################################################"
+ echo "# -- Proceeding with EBS ADOP session:${2} " $'\n'
+
  adop_setenv ${environment_file} ${1}
  adop_status
- echo " (echo ${apps_pass}; echo ${sys_pass}; echo ${wls_pass}) | adop phase=${2} ${3}"
+ echo "# -- Running:  adop phase=${2} ${3}" $'\n'
+ (echo ${apps_pass}; echo ${sys_pass}; echo ${wls_pass}) | adop phase=${2} ${3}
+
+  echo "# -- EOF: Proceeding with EBS ADOP session:${s}"
+ echo "---" $'\n'
+}
+
+adop_apply_phase (){
+ # usage: adop_run_phase <edition> <phase> <options> 
+ # (echo ${apps_pass}; echo ${sys_pass}; echo ${wls_pass}) | adop phase=${adop_phase} ${adop_options}
+
+ date
+ echo "######################################################"
+ echo "# -- Proceeding with EBS ADOP APPLY session:${2} " $'\n'
+
+ adop_setenv ${environment_file} ${1}
+ adop_status
+
+ patch_list=$(echo $3 | grep -o "patches=.*[0-9]"  | awk -F[=\ ] '{print $2}')
+ echo "patch_list: $patch_list" 
+
+ for i in ${patch_list//,/ }
+  do
+      # call your procedure/other scripts here below
+      echo "Extracting patch: $i to NE_BASE/EBSapps/patch"
+      unzip -qo ${STAGE_DIR}/p${i}*.zip -d $NE_BASE/EBSapps/patch/
+  done
+ 
+ echo "# -- Running:  adop phase=${2} ${3}" $'\n'
+ (echo ${apps_pass}; echo ${sys_pass}; echo ${wls_pass}) | adop phase=${2} ${3}
+
+  echo "# -- EOF: Proceeding with EBS ADOP session:${s}"
+ echo "---" $'\n'
+}
+
+fmw_ocmrf(){
+  # creates response files for patching
+  echo "��sr0oracle.sysman.ccr.collector.install.ResponseFile~'���83�Lm_dateCreationtLjava/util/Date;L  m_licenset6Loracle/sysman/ccr/collector/install/LicenseAgreement;Lm_networkConfigt:Loracle/sysman/ccr/collector/install/NetworkConfiguration;L
+                                                                                                                                                                                                                                              m_principalt>Loracle/sysman/ccr/collector/install/OCMRegistrationPrincipal;L
+                                                                                                                                                                                                                                                                                                                          m_strCreatortLjava/lang/String;Lm_strResponseVersionq~xpsrjava.util.Datehj�KYtxp�7yWXxsr4oracle.sysman.ccr.collector.install.LicenseAgreement��!MJ��Z
+                                                                                                   m_bAgreementxr=oracle.sysman.ccr.collector.install.ConfigurationResponseInfo���ɇ<#�xppptoraclet
+10.3.0.0.0
+~" > $1/$2
 }
 
 jdk_32bit_patch(){
@@ -32,14 +86,16 @@ echo "Proceeding with JDK 32bit update"
   #adop_status
   cd $COMMON_TOP/util
   echo "work in: $(pwd)"
-  $COMMON_TOP/util/jdk32/bin/java -version
+  ver=`$COMMON_TOP/util/jdk32/bin/java -version 2> /tmp/j_ver; cat /tmp/j_ver; rm /tmp/j_ver`
+  echo "JAVA: $(ver)"
   zip -qr jdk32_${curr_date}.zip jdk32
   unzip ${STAGE_DIR}/${patch} *.tar.gz # extract only tgz
   tar xzf jdk-*i586.tar.gz
   rm -Rf jdk32 jdk-*i586.tar.gz
   mv jdk1* jdk32
-  $COMMON_TOP/util/jdk32/bin/java -version
-
+  ver=`$COMMON_TOP/util/jdk32/bin/java -version 2> /tmp/j_ver; cat /tmp/j_ver; rm /tmp/j_ver`
+  echo "JAVA: $(ver)"
+  
 echo "EOF: Proceeding with JDK 32bit update"
 echo "---"
 }
@@ -56,14 +112,268 @@ echo "Proceeding with JDK 64bit update"
   #adop_status
   cd $COMMON_TOP/util 
   echo "work in: $(pwd)" 
-  $COMMON_TOP/util/jdk32/bin/java -version 
+   echo $($COMMON_TOP/util/jdk64/bin/java -version)
   zip -qr jdk64_${curr_date}.zip jdk64
   unzip ${STAGE_DIR}/${patch} *x64.tar.gz   # extract only tgz
   tar xzf jdk-*x64.tar.gz  
   rm -Rf jdk64 jdk-*x64.tar.gz 
   mv jdk1* jdk64 
-  $COMMON_TOP/util/jdk32/bin/java -version
+   echo $($COMMON_TOP/util/jdk64/bin/java -version)
 
 echo "EOF: Proceeding with JDK 64bit update"
 echo "---"
+}
+
+
+wls_1036_rollback(){
+date
+echo "######################################################"
+echo "Proceeding with WLS 10.3.6 rollback" $'\n'
+
+  patch=$(echo $3 | sed -e 's/patches=//g')
+   echo "# -- PATCH to rollbacl: $patch"
+  adop_setenv ${environment_file} ${1}
+  #adop_status
+  
+  # navigate BSU dir
+  cd $FMW_HOME/utils/bsu
+
+  # list patches applied
+   echo "# -- List of current patches" $'\n'
+  ./bsu.sh -view -patch_download_dir=${FMW_HOME}/utils/bsu/cache_dir -prod_dir=${FMW_HOME}/wlserver_10.3 -status=applied
+
+   echo "# -- Rollback BSU ${patch} " $'\n'
+  ./bsu.sh -remove -prod_dir=${FMW_HOME}/wlserver_10.3 -patchlist=${patch}
+   
+   echo "# -- WLS patch status after rollback:" $'\n' 
+  ./bsu.sh -view -patch_download_dir=${FMW_HOME}/utils/bsu/cache_dir -prod_dir=${FMW_HOME}/wlserver_10.3 -status=applied
+
+echo "# --EOF: Proceeding with WLS 10.3.6 rollback" $'\n'
+echo "---" 
+}
+
+
+wls_1036_apply(){
+date
+echo "######################################################"
+echo "# --Proceeding with WLS 10.3.6 Apply" $'\n'
+
+  patch=$(echo $3 | sed -e 's/patches=//g')
+  #echo "${STAGE_DIR}/${patch}"
+  adop_setenv ${environment_file} ${1}
+  #adop_status
+  
+  # navigate BSU dir
+  cd $FMW_HOME/utils/bsu
+
+  # get BSU code
+  echo "# -- Staging patch: ${patch}" $'\n'
+  code=$(unzip -l ${STAGE_DIR}/${patch} | grep -o ".....jar"| cut -c1-4) # check for 4_chars.jar pattern
+  unzip -o  ${STAGE_DIR}/${patch} -d ${FMW_HOME}/utils/bsu/cache_dir
+  
+  echo "# -- List of current patches" $'\n'
+  ./bsu.sh -view -patch_download_dir=${FMW_HOME}/utils/bsu/cache_dir -prod_dir=${FMW_HOME}/wlserver_10.3 -status=applied
+  
+  echo "# -- Applying BSU ${patch} with code: ${code}" $'\n'
+  ./bsu.sh -install -patch_download_dir=${FMW_HOME}/utils/bsu/cache_dir -patchlist=${code} -prod_dir=${FMW_HOME}/wlserver_10.3
+
+  echo "# -- WLS patch status after apply" $'\n'
+  ./bsu.sh -view -patch_download_dir=${FMW_HOME}/utils/bsu/cache_dir -prod_dir=${FMW_HOME}/wlserver_10.3 -status=applied
+
+  echo "# --EOF: Proceeding with WLS 10.3.6 Apply"
+echo "---" $'\n'
+}
+
+ebs_oracle_common_apply(){
+date
+echo "######################################################"
+echo "# -- Proceeding with EBS Oracle_Common Apply" $'\n'
+
+  patch=$(echo $3 | sed -e 's/patches=//g')
+  adop_setenv ${environment_file} ${1}
+  #adop_status
+  
+  cd $FMW_HOME/oracle_common
+  export ORACLE_HOME=$FMW_HOME/oracle_common
+
+  echo "# -- List of current patches" $'\n'
+  $ORACLE_HOME/OPatch/opatch version
+  $ORACLE_HOME/OPatch/opatch lsinventory | grep applied
+
+  echo "# -- Applying patch ${patch}" $'\n'
+  
+  fmw_ocmrf /tmp oc
+  echo "# -- Running: $ORACLE_HOME/OPatch/opatch apply ${STAGE_DIR}/${patch} -silent -force -ocmrf /tmp/oc" $'\n'
+  $ORACLE_HOME/OPatch/opatch apply ${STAGE_DIR}/${patch} -silent -force -ocmrf /tmp/oc
+  rm -f /tmp/oc
+  
+  echo "# -- List of patches after apply" $'\n'
+  $ORACLE_HOME/OPatch/opatch version
+  $ORACLE_HOME/OPatch/opatch lsinventory | grep applied
+
+  echo "#- -EOF:Proceeding with EBS Oracle_Common Apply"
+echo "---" $'\n'
+}
+
+ebs_oracle_common_rollback(){
+date
+echo "######################################################"
+echo "# -- Proceeding with EBS Oracle_Common Rollback" $'\n'
+
+  patch=$(echo $3 | sed -e 's/patches=//g')
+  adop_setenv ${environment_file} ${1}
+  #adop_status
+  
+  cd $FMW_HOME/oracle_common
+  export ORACLE_HOME=$FMW_HOME/oracle_common
+
+  echo "# -- List of current patches" $'\n'
+  $ORACLE_HOME/OPatch/opatch version
+  $ORACLE_HOME/OPatch/opatch lsinventory | grep applied
+
+  echo "# -- Rolling back patch ${patch}" $'\n'
+  echo "# -- Running: $ORACLE_HOME/OPatch/opatch rollback -id ${patch} -silent" $'\n'
+  $ORACLE_HOME/OPatch/opatch rollback -id ${patch} -silent
+  
+  echo "# -- List of patches after apply" $'\n'
+  $ORACLE_HOME/OPatch/opatch version
+  $ORACLE_HOME/OPatch/opatch lsinventory | grep applied
+
+  echo "# --EOF: Proceeding with EBS Oracle_Common Rollback"
+echo "---" $'\n'
+}
+
+ebs_oracle_webtier_apply(){
+date
+echo "######################################################"
+echo "# -- Proceeding with EBS Oracle Webtier Apply" $'\n'
+
+  patch=$(echo $3 | sed -e 's/patches=//g')
+  adop_setenv ${environment_file} ${1}
+  #adop_status
+  
+  cd $FMW_HOME/webtier
+  export ORACLE_HOME=$FMW_HOME/webtier
+
+  echo "# -- List of current patches" $'\n'
+  $ORACLE_HOME/OPatch/opatch version
+  $ORACLE_HOME/OPatch/opatch lsinventory | grep applied
+
+  echo "# -- Applying patch ${patch}" $'\n'
+  # there're no response file - so feeding in responses
+  fmw_ocmrf /tmp oc
+  echo "# -- Running: $ORACLE_HOME/OPatch/opatch apply ${STAGE_DIR}/${patch} -silent -force -ocmrf /tmp/oc" $'\n'
+  $ORACLE_HOME/OPatch/opatch apply ${STAGE_DIR}/${patch} -silent -force -ocmrf /tmp/oc
+  rm -f /tmp/oc
+
+  echo "# -- List of patches after apply" $'\n'
+  $ORACLE_HOME/OPatch/opatch version
+  $ORACLE_HOME/OPatch/opatch lsinventory | grep applied
+
+  echo "#- -EOF:Proceeding with EBS Oracle Webtier Apply"
+echo "---" $'\n'
+}
+
+ebs_oracle_webtier_rollback(){
+date
+echo "######################################################"
+echo "# -- Proceeding with EBS Oracle Webtier Rollback" $'\n'
+
+  patch=$(echo $3 | sed -e 's/patches=//g')
+  adop_setenv ${environment_file} ${1}
+  #adop_status
+  
+  cd $FMW_HOME/webtier
+  export ORACLE_HOME=$FMW_HOME/webtier
+
+  echo "# -- List of current patches" $'\n'
+  $ORACLE_HOME/OPatch/opatch version
+  $ORACLE_HOME/OPatch/opatch lsinventory | grep applied
+
+  echo "# -- Rolling back patch ${patch}" $'\n'
+  echo "# -- Running: $ORACLE_HOME/OPatch/opatch rollback -id ${patch} -silent" $'\n'
+  $ORACLE_HOME/OPatch/opatch rollback -id ${patch} -silent
+  
+  echo "# -- List of patches after apply" $'\n'
+  $ORACLE_HOME/OPatch/opatch version
+  $ORACLE_HOME/OPatch/opatch lsinventory | grep applied
+
+  echo "# --EOF: Proceeding with EBS Oracle Webtier Rollback"
+echo "---" $'\n'
+}
+
+ebs_oh1012_apply(){
+date
+echo "######################################################"
+echo "# -- Proceeding with EBS OH_10.1.2" $'\n'
+
+  patch=$(echo $3 | sed -e 's/patches=//g')
+  adop_setenv ${environment_file} ${1}
+  #adop_status
+  
+  cd $ORACLE_HOME
+
+  echo "# -- List of current patches" $'\n'
+  $ORACLE_HOME/OPatch/opatch version
+  $ORACLE_HOME/OPatch/opatch lsinventory | grep applied
+
+  echo "# -- Applying patch ${patch}" $'\n'
+  # there're no response file - so feeding in responses
+  fmw_ocmrf /tmp oc
+  unzip -qo ${STAGE_DIR}/${patch} -d $ORACLE_HOME/OPatch
+  patch_id=$(echo ${patch} | awk -F[p_] '{print $2}')
+  echo "# -- Running: $ORACLE_HOME/OPatch/opatch apply ${STAGE_DIR}/${patch} -silent -force -ocmrf /tmp/oc" $'\n'
+  $ORACLE_HOME/OPatch/opatch apply ${ORACLE_HOME}/OPatch/${patch_id} -silent -force -ocmrf /tmp/oc
+  rm -f /tmp/oc
+  rm -Rf ${ORACLE_HOME}/OPatch/${patch_id}
+
+  echo "# -- List of patches after apply" $'\n'
+  $ORACLE_HOME/OPatch/opatch version
+  $ORACLE_HOME/OPatch/opatch lsinventory | grep applied
+
+  echo "#- -EOF:Proceeding with EBS OH_10.1.2 Apply"
+echo "---" $'\n'
+}
+
+ebs_oh1012_rollback(){
+date
+echo "######################################################"
+echo "# -- Proceeding with EBS Oracle OH_10.1.2 Rollback" $'\n'
+
+  patch=$(echo $3 | sed -e 's/patches=//g')
+  adop_setenv ${environment_file} ${1}
+  #adop_status
+  
+  cd $ORACLE_HOME
+
+  echo "# -- List of current patches" $'\n'
+  $ORACLE_HOME/OPatch/opatch version
+  $ORACLE_HOME/OPatch/opatch lsinventory | grep applied
+
+  echo "# -- Rolling back patch ${patch}" $'\n'
+  echo "# -- Running: $ORACLE_HOME/OPatch/opatch rollback -id ${patch} -silent" $'\n'
+  $ORACLE_HOME/OPatch/opatch rollback -id ${patch} -silent
+  
+  echo "# -- List of patches after apply" $'\n'
+  $ORACLE_HOME/OPatch/opatch version
+  $ORACLE_HOME/OPatch/opatch lsinventory | grep applied
+
+  echo "# --EOF: Proceeding with EBS Oracle OH_10.1.2 Rollback"
+echo "---" $'\n'
+}
+
+
+function_a(){
+date
+echo "######################################################"
+echo "# -- Proceeding with function_a" $'\n'
+
+  patch=$(echo $3 | sed -e 's/patches=//g')
+  adop_setenv ${environment_file} ${1}
+  #adop_status
+  
+  
+  
+  echo "# --EOF: Proceeding with function_a"
+echo "---" $'\n'
 }

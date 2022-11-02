@@ -28,7 +28,7 @@ adop_run_phase ${fs_edition} ${phase_name} ${phase_options}
 
 {% elif item.phase_name == "apply" %}
 echo "ADOP cycle: ${phase_name} ${phase_options}"
-adop_run_phase ${fs_edition} ${phase_name} ${phase_options} 
+adop_apply_phase ${fs_edition} ${phase_name} "${phase_options}"
 
 {% elif item.phase_name == "finalise" %}
 echo "ADOP cycle: ${phase_name} ${phase_options}"
@@ -58,14 +58,38 @@ jdk_32bit_patch ${fs_edition} ${phase_name} ${phase_options}
 echo "jdk_64bit_patch: ${phase_options} "
 jdk_64bit_patch ${fs_edition} ${phase_name} ${phase_options} 
 
-{% elif item.phase_name == "wls_bsu_patch" %}
-echo "wls_bsu_patch"
-{% elif item.phase_name == "wls_bsu_rollback" %}
-echo "wls_bsu_rollback"
-{% elif item.phase_name == "ohs_patch" %}
-echo "ohs_patch"
-{% elif item.phase_name == "ohs_rollback" %}
-echo "ohs_rollback"
+{% elif item.phase_name == "wls_1036_apply" %}
+echo "# -- running function: wls_1036_apply"
+wls_1036_apply ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "wls_1036_rollback" %}
+echo "# -- running function: wls_1036_rollback"
+wls_1036_rollback ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "ebs_oracle_common_apply" %}
+echo "# -- running function: ebs_oracle_common_apply"
+ebs_oracle_common_apply ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "ebs_oracle_common_rollback" %}
+echo "# -- running function: ebs_oracle_common_rollback"
+ebs_oracle_common_rollback ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "ebs_oracle_webtier_apply" %}
+echo "# -- running function: ebs_oracle_webtier_apply"
+ebs_oracle_webtier_apply ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "ebs_oracle_webtier_rollback" %}
+echo "# -- running function: ebs_oracle_webtier_rollback"
+ebs_oracle_webtier_rollback ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "ebs_oh1012_apply" %}
+echo "# -- running function: ebs_oh1012_apply"
+ebs_oh1012_apply ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "ebs_oh1012_rollback" %}
+echo "# -- running function: ebs_oh1012_rollback"
+ebs_oh1012_rollback ${fs_edition} ${phase_name} ${phase_options} 
+
 {% endif %}
 
 {% endfor %}
