@@ -123,12 +123,21 @@ db_19c_rdbms_apply_list:
 
 # ADOP phases
 adop_patch:
+   # - phase_name: ebs_stop
+   #   phase_options: ""
+   #   fs_edition: run
+   # - phase_name: ebs_start
+   #   phase_options: ""
+   #   fs_edition: run
+   - phase_name: ebs_autoconfig
+     phase_options: ""
+     fs_edition: run
    # - phase_name: prepare
    #   phase_options: ""
    #   fs_edition: run
-   - phase_name: apply
-     phase_options: "patches=34197137,34196316"
-     fs_edition: patch
+   # - phase_name: apply
+   #   phase_options: '"patches=34197137,34196316 merge=yes"'
+   #   fs_edition: patch
    # - phase_name: jdk_32bit_patch
    #   phase_options: "patches=p34170410_170351_LINUX.zip"
    #   fs_edition: patch

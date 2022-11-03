@@ -1,0 +1,17 @@
+- name: Create LOG directory
+  file:
+    path: "{{ remote_logs  }}"
+    state: directory
+    mode: 0777
+
+- name: Create STAGE directory
+  file:
+    path: "{{ remote_stage }}"
+    state: directory 
+    mode: 0777
+
+- name: Create bin directory
+  file:
+    path: "{{ remote_bin }}"
+    state: directory 
+    mode: 0777

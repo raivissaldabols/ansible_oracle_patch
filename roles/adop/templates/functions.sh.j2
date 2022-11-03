@@ -19,6 +19,46 @@ adop_status (){
   (echo ${apps_pass}) | adop - status
 }
 
+ebs_stop (){
+ date
+ echo "######################################################"
+ echo "# -- Proceeding with EBS STOP session:${2} " $'\n'
+
+ adop_setenv ${environment_file} ${1}
+ echo "# -- Running:  $ADMIN_SCRIPTS_HOME/./adstpall.sh" $'\n'
+ (echo ${apps_user}; echo ${apps_pass}; echo ${wls_pass}) | $ADMIN_SCRIPTS_HOME/./adstpall.sh
+
+ echo "# -- EOF: Proceeding with EBS STOP session:${s}"
+ echo "---" $'\n'
+}
+
+ebs_start (){
+ date
+ echo "######################################################"
+ echo "# -- Proceeding with EBS START session:${2} " $'\n'
+
+ adop_setenv ${environment_file} ${1}
+ echo "# -- Running:  $ADMIN_SCRIPTS_HOME/./adstrtal.sh" $'\n'
+ (echo ${apps_user}; echo ${apps_pass}; echo ${wls_pass}) | $ADMIN_SCRIPTS_HOME/./adstrtal.sh
+
+ echo "# -- EOF: Proceeding with EBS START session:${s}"
+ echo "---" $'\n'
+}
+
+ebs_autoconfig (){
+ date
+ echo "######################################################"
+ echo "# -- Proceeding with EBS AUTOCONFIG session:${2} " $'\n'
+
+ adop_setenv ${environment_file} ${1}
+ echo "# -- Running:  $ADMIN_SCRIPTS_HOME/./adautocfg.sh" $'\n'
+ echo "# -- Conext_file:  $CONTEXT_FILE" $'\n'
+ ( echo ${apps_pass}; ) | $ADMIN_SCRIPTS_HOME/./adautocfg.sh
+
+ echo "# -- EOF: Proceeding with EBS AUTOCONFIG session:${s}"
+ echo "---" $'\n'
+}
+
 adop_run_phase (){
  # usage: adop_run_phase <edition> <phase> <options> 
  # (echo ${apps_pass}; echo ${sys_pass}; echo ${wls_pass}) | adop phase=${adop_phase} ${adop_options}

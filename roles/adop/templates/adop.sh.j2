@@ -22,7 +22,19 @@ phase_name={{ item.phase_name }}
 phase_options={{ item.phase_options }}
 fs_edition={{ item.fs_edition }}
 
-{% if item.phase_name == "prepare" %}
+{% if item.phase_name == "ebs_stop" %}
+echo "ADOP cycle: ${phase_name} ${phase_options}"
+ebs_stop ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "ebs_start" %}
+echo "ADOP cycle: ${phase_name} ${phase_options}"
+ebs_start ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "ebs_autoconfig" %}
+echo "ADOP cycle: ${phase_name} ${phase_options}"
+ebs_autoconfig ${fs_edition} ${phase_name} ${phase_options} 
+
+{% elif item.phase_name == "prepare" %}
 echo "ADOP cycle: ${phase_name} ${phase_options}"
 adop_run_phase ${fs_edition} ${phase_name} ${phase_options} 
 
