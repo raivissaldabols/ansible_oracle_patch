@@ -8,4 +8,7 @@ oracle_base: /u02/oracle/vision/12.1.0
 soft_user: oracle
 soft_group: dba
 
-# TBD : Database version?
+# TBD : Database version
+environment_file: /home/oracle/UAT_dbuataws.env
+oracle_sid: UAT
+listener_name: UAT

@@ -18,6 +18,8 @@
 #     var: reg_output.stdout_lines
 #     verbosity: 0
 
+### LUKE Davies scripting
+
 - name: Stage LD_Oracle Tool Target
   ansible.builtin.copy:
     src: oracle_patching-main.zip
@@ -46,3 +48,30 @@
     mode: 0744
     force: yes
   with_items: "{{ remote_bin }}"
+
+  ### instructions:
+- name: Pushing RDBMS functions
+  ansible.builtin.template:
+    src: functions.sh.j2
+    dest: "{{ remote_bin }}/functions.sh"
+    mode: 0744
+    force: yes
+  with_items: "{{ remote_bin }}"
+
+- name: Pushing RDBMS execute
+  ansible.builtin.template:
+    src: rdbms_patch.sh.j2
+    dest: "{{ remote_bin }}/{{ env }}_{{target}}_rdbms_patch.sh"
+    mode: 0744
+    force: yes
+  with_items: "{{ remote_bin }}"
+
+- name: Execute RDBMS execute patching script
+  ansible.builtin.shell: 
+    sudo su - {{ soft_user }} -c "sh {{ remote_bin }}/{{ env }}_{{target}}_rdbms_patch.sh | tee -a {{ remote_logs }}/{{ env }}_{{target}}_$(date '+%Y%m%d_%H%M%S')_rdbms_patch.log"
+  register: reg_output
+
+- name: Print return information from the previous task
+  ansible.builtin.debug:
+    var: reg_output.stdout_lines
+    verbosity: 0

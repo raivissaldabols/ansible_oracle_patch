@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# source static function
+source {{ remote_bin }}/functions.sh
+
+export STAGE_DIR={{ remote_stage }}/{{ cycle }} ## note staging through cycles
+export environment_file={{ environment_file }}
+
+rdbms_setenv ${environment_file}
+
+# STOP DB
+rdbms_lsnr_stop {{ listener_name }}
+rdbms_stop 
+
+# rollback part
+
+{% for item in ld_rdbms_rollback_list %}
+name={{ item.name }}
+number={{ item.number }}
+echo "Rollback patch: ${name}"
+bash {{ remote_bin }}/oracle_patching-main/bin/op.sh -I -s -y -o ${ORACLE_HOME} -r ${number}
+{% endfor %}
+
+# apply part
+{% for item in ld_rdbms_apply_list %}
+name={{ item.name }}
+number={{ item.number }}
+file={{ item.file }}
+
+echo "Applying patch: ${name}"
+bash {{ remote_bin }}/oracle_patching-main/bin/op.sh -I -s -y -l ${STAGE_DIR} -o ${ORACLE_HOME} -n ${file} ${number}
+{% endfor %}
+
+# START DB
+rdbms_lsnr_start {{ listener_name }}
+rdbms_start

@@ -111,17 +111,44 @@ db_19c_rdbms_opatch:
       mos_platform: 226P
 
 db_19c_rdbms_rollback_list:
-   -  name: "APPSST19C: XTTS PDB - TABLE IMPORT/CREATION FAILED WITH ORA-39083 ORA-14334"
-      number: 31424070
+   -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
+      number: 34086863
 
 db_19c_rdbms_apply_list:
-   -  name: "APPSST19C: XTTS PDB - TABLE IMPORT/CREATION FAILED WITH ORA-39083 ORA-14334"
-      number: 31424070
-      mos_regexp: 190000
-      mos_platform: 226P
+   -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
+      number: 34086863
+      file: p34086863_121020_Linux-x86-64.zip
 
+
+### LD (luke) RDBMS patching automation
+ld_rdbms_rollback_list:
+   -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
+      number: 34086863
+   -  name: "Database PSU 12.1.0.2.220719 Patch 34057742 for UNIX"
+      number: 34057742
+
+ld_rdbms_apply_list:
+   -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
+      number: 34086863
+      file: p34086863_121020_Linux-x86-64.zip
+   -  name: "Database PSU 12.1.0.2.220719 Patch 34057742 for UNIX"
+      number: 34057742
+      file: p34057742_121020_Linux-x86-64.zip
 
 # ADOP phases
+# available adop_patch functions
+# --
+# jdk_32bit_patch
+# jdk_64bit_patch
+# wls_1036_apply
+# wls_1036_rollback
+# ebs_oracle_common_apply
+# ebs_oracle_common_rollback
+# ebs_oracle_webtier_apply
+# ebs_oracle_webtier_rollback
+# ebs_oh1012_apply
+# ebs_oh1012_rollback
+
 adop_patch:
    # - phase_name: ebs_stop
    #   phase_options: ""
@@ -175,23 +202,4 @@ adop_patch:
    #   phase_options: ""
    #   fs_edition: run
 
-     
-adop_downtime:
-   - phase_name: ebs_stop
-   - phase_name: cutover
-   - phase_name: ebs_start
-   - phase_name: fs_clone
-   - phase_name: clenaup
 
-# available adop_patch functions
-# --
-# jdk_32bit_patch
-# jdk_64bit_patch
-# wls_1036_apply
-# wls_1036_rollback
-# ebs_oracle_common_apply
-# ebs_oracle_common_rollback
-# ebs_oracle_webtier_apply
-# ebs_oracle_webtier_rollback
-# ebs_oh1012_apply
-# ebs_oh1012_rollback
