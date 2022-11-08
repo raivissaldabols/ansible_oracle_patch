@@ -1,0 +1,17 @@
+- name: Pushing Rollback script
+  ansible.builtin.template:
+    src: rdbms_rollback.sh.j2
+    dest: "{{ remote_bin }}/{{target}}_rdbms_rollback.sh"
+    mode: 0744
+    force: yes
+  with_items: "{{ remote_bin }}"
+
+- name: Execute Rollback script
+  ansible.builtin.shell: 
+    sudo su - {{ soft_user }} -c "sh {{ remote_bin }}/{{target}}_rdbms_rollback.sh | tee -a {{ remote_logs }}/{{target}}_rdbms_rollback_$(date '+%Y%m%d_%H%M%S').log"
+  register: reg_output
+
+- name: Print return information from the previous task
+  ansible.builtin.debug:
+    var: reg_output.stdout_lines
+    verbosity: 0
