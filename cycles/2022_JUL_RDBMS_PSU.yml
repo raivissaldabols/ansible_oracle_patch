@@ -79,6 +79,16 @@ rdbms_conflict_check_list:
   - 33912892
   - 23727148
 
+# rdbms_rollback_list
+rdbms_rollback_list:
+  - 20181016 
+  - 21321429 
+  - 21967332 
+  - 28653113 
+  - 32901495 
+  - 33569841 
+  - 33649800 
+
 # Second list will be describing apply/rollback
 db_19c_rdbms_opatch:
    -  name: Opatch 19c

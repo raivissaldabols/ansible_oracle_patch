@@ -1,0 +1,5 @@
+# Rollback playbook
+- hosts: all
+  roles:
+    - role: setvars
+    - role: rollback
