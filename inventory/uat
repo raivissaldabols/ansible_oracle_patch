@@ -1,8 +1,8 @@
 [uat_rdbms]
-uatdb ansible_ssh_host=ec2-54-93-204-83.eu-central-1.compute.amazonaws.com ansible_user=ansible ansible_ssh_private_key_file="vars/keys/ansible.pem"
+uatdb ansible_ssh_host=ec2-3-66-27-159.eu-central-1.compute.amazonaws.com ansible_user=ansible ansible_ssh_private_key_file="vars/keys/ansible.pem"
 
 [uat_app]
-uatapp ansible_ssh_host=ec2-3-65-218-254.eu-central-1.compute.amazonaws.com ansible_user=ansible ansible_ssh_private_key_file="vars/keys/ansible.pem"
+uatapp ansible_ssh_host=ec2-18-185-107-78.eu-central-1.compute.amazonaws.com ansible_user=ansible ansible_ssh_private_key_file="vars/keys/ansible.pem"
 
 [uat:children]
 uat_rdbms

@@ -5,7 +5,7 @@
     mode: 0755
     force: yes
 
-- name: "Execute Oracle OPATCH patching script"
+- name: "Execute Oracle Checkconflict script"
   ansible.builtin.shell: 
     sudo su - {{ soft_user }} -c "sh {{ remote_bin }}/{{ target }}_checkconflict.sh | tee -a {{ remote_logs }}/{{ target }}_checkconflict_$(date '+%Y%m%d_%H%M%S').log"
   register: reg_output

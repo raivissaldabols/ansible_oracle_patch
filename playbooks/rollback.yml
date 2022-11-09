@@ -1,5 +1,16 @@
 # Rollback playbook
 - hosts: all
-  roles:
-    - role: setvars
-    - role: rollback
+  tasks:
+    - name: SetVars
+      include_role:
+        name: setvars
+
+    - name: Confirm Environment Variables
+      pause:
+        prompt: "Please verify Environment Variables printed above, type yes to confirm"
+      register: confirm_env
+
+    - name: Initiate Rollback
+      include_role:
+        name: rollback
+      when: confirm_env.user_input | bool

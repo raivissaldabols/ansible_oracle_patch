@@ -1,5 +1,16 @@
 # Playbook to Check patch conflicts
 - hosts: all
-  roles:
-    - role: setvars
-    - role: checkconflict
+  tasks:
+    - name: SetVars
+      include_role:
+        name: setvars
+
+    - name: Confirm Environment Variables
+      pause:
+        prompt: "Please verify Environment Variables printed above, type yes to confirm"
+      register: confirm_env
+
+    - name: Initiate checkconflict
+      include_role:
+        name: checkconflict
+      when: confirm_env.user_input | bool

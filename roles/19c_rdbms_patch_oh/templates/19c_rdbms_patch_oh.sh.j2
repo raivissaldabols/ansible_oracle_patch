@@ -19,20 +19,22 @@ $ORACLE_HOME/OPatch/opatch lspatches
 $ORACLE_HOME/OPatch/opatch lsinv | grep applied
 
 # check if OH busy
-echo " ## exit if Oracle running"
-if [[ $(fuser $ORACLE_HOME/bin/oracle) != '' ]]; then 
-	echo "$ORACLE_HOME: seems to be up - existing now"; 
-	exit 1;
-fi
+# echo " ## exit if Oracle running"
+# if [[ $(fuser $ORACLE_HOME/bin/oracle) != '' ]]; then 
+# 	echo "$ORACLE_HOME: seems to be up - existing now"; 
+# 	exit 1;
+# fi
 
 ## Rollback
 echo ""
-echo "## Rollback patches per list"
+echo "## Rollback patches per list if it exists"
+{% if db_19c_rdbms_rollback_list %}
 {% for item in db_19c_rdbms_rollback_list %}
 export patch={{ item.number }}
 echo "## rollback patch: ${patch}"
 $ORACLE_HOME/OPatch/opatch rollback -id ${patch} -silent
 {% endfor %}
+{% endif %}
 
 echo ""
 echo "## Apply patches per list"
@@ -40,7 +42,21 @@ echo "## Apply patches per list"
 export patch={{ item.number }}
 export patch_pattern={{ item.mos_regexp }}
 echo "## apply patch: ${patch}: from: ${STAGE_DIR}/p${patch}*${patch_pattern}*.zip"
-$ORACLE_HOME/OPatch/opatch apply -silent ${STAGE_DIR}/p${patch}*${patch_pattern}*.zip
+cd ${STAGE_DIR}
+if [ -d "{{ item.number }}" ]; 
+ then
+   cd ${STAGE_DIR}/{{ item.number }}
+   echo "Patch {{ item.number }} found, applying patch"
+   $ORACLE_HOME/OPatch/opatch apply -silent 
+ else
+   cd ${STAGE_DIR}
+   echo "Unzipping patch"
+   unzip p${patch}*${patch_pattern}*.zip
+   echo "Applying Patch"
+   cd {{ item.number }}
+   $ORACLE_HOME/OPatch/opatch apply -silent    
+fi
+# $ORACLE_HOME/OPatch/opatch apply -silent ${STAGE_DIR}/p${patch}*${patch_pattern}*.zip
 {% endfor %}
 
 echo "## OPatch checks"

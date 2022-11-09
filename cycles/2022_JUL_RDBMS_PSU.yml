@@ -88,6 +88,8 @@ rdbms_rollback_list:
   - 32901495 
   - 33569841 
   - 33649800 
+  - 25305405
+  - 21322448
 
 # Second list will be describing apply/rollback
 db_19c_rdbms_opatch:
@@ -97,14 +99,30 @@ db_19c_rdbms_opatch:
       mos_platform: 226P
 
 db_19c_rdbms_rollback_list:
-   -  name: "APPSST19C: XTTS PDB - TABLE IMPORT/CREATION FAILED WITH ORA-39083 ORA-14334"
-      number: 31424070
+   # -  name: "APPSST19C: XTTS PDB - TABLE IMPORT/CREATION FAILED WITH ORA-39083 ORA-14334"
+   #    number: 31424070
 
 db_19c_rdbms_apply_list:
-   -  name: "APPSST19C: XTTS PDB - TABLE IMPORT/CREATION FAILED WITH ORA-39083 ORA-14334"
-      number: 31424070
-      mos_regexp: 190000
+   -  name: "Database PSU 12.1.0.2.220719 Patch 34057742 for UNIX"
+      number: 34057742
+      mos_regexp:
       mos_platform: 226P
+   # -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
+   #    number: 34086863
+   #    mos_regexp:
+   #    mos_platform: 226P
+   # -  name: "JDK7u351Patch 34113570"
+   #    number: 34113570
+   #    mos_regexp:
+   #    mos_platform: 226P
+   # -  name: "Perl Patch 33912892"
+   #    number: 33912892
+   #    mos_regexp: 
+   #    mos_platform: 226P
+   # -  name: "Oracle JavaVM Component Database PSU - Generic JDBC 12.1.0.2.160719 Patch 23727148"
+   #    number: 23727148
+   #    mos_regexp: 
+   #    mos_platform: 226P
 
 
 # ADOP
