@@ -255,6 +255,42 @@ echo "# -- Proceeding with EBS Oracle_Common Apply" $'\n'
 echo "---" $'\n'
 }
 
+ebs_oracle_common_apply_oui(){
+date
+echo "######################################################"
+echo "# -- Proceeding with EBS Oracle_Common Apply OUI" $'\n'
+echo "# -- Specific OUI patche" $'\n'
+
+  patch=$(echo $3 | sed -e 's/patches=//g')
+  patch_number=$( echo $patch | awk -F[p_] '{print $2}')
+  adop_setenv ${environment_file} ${1}
+  #adop_status
+  
+  cd $FMW_HOME/oracle_common
+  export ORACLE_HOME=$FMW_HOME/oracle_common
+
+  echo "# -- List of current patches" $'\n'
+  $ORACLE_HOME/OPatch/opatch version
+  $ORACLE_HOME/OPatch/opatch lsinventory | grep applied
+
+  echo "# -- Applying patch ${patch}" $'\n'
+  
+  fmw_ocmrf /tmp oc
+  unzip ${STAGE_DIR}/${patch} -d $ORACLE_HOME/OPatch/ 
+  echo "# -- Running: $ORACLE_HOME/OPatch/opatch apply $ORACLE_HOME/OPatch/${patch_number}/oui  -silent -force -ocmrf /tmp/oc" $'\n'
+  $ORACLE_HOME/OPatch/opatch apply $ORACLE_HOME/OPatch/${patch_number}/oui -silent -force -ocmrf /tmp/oc
+  if [ -d "$ORACLE_HOME/OPatch/${patch_number}" ]; then rm -Rf $ORACLE_HOME/OPatch/${patch_number}; fi
+  rm -f /tmp/oc
+  
+  echo "# -- List of patches after apply" $'\n'
+  $ORACLE_HOME/OPatch/opatch version
+  $ORACLE_HOME/OPatch/opatch lsinventory | grep applied
+
+  echo "#- -EOF:Proceeding with EBS Oracle_Common Apply"
+echo "---" $'\n'
+}
+
+
 ebs_oracle_common_rollback(){
 date
 echo "######################################################"
@@ -399,6 +435,24 @@ echo "# -- Proceeding with EBS Oracle OH_10.1.2 Rollback" $'\n'
   $ORACLE_HOME/OPatch/opatch lsinventory | grep applied
 
   echo "# --EOF: Proceeding with EBS Oracle OH_10.1.2 Rollback"
+echo "---" $'\n'
+}
+
+ebs_etcc(){
+date
+echo "######################################################"
+echo "# -- Proceeding with EBS Apps ETCC" $'\n'
+
+  patch_list=$(echo $3 | grep -oP 'patches=p\K.*?(?=_)')
+  adop_setenv ${environment_file} ${1}
+  #adop_status
+
+  mkdir -p $PATCH_TOP/etcc 
+  unzip -o $STAGE_DIR/p${patch_list}*.zip -d $PATCH_TOP/etcc/
+
+  (echo ${apps_pass};) | $PATCH_TOP/etcc/checkMTpatch.sh
+  
+  echo "# --EOF: Proceeding with EBS Apps ETC"
 echo "---" $'\n'
 }
 

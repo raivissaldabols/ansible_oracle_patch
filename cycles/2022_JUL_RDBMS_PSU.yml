@@ -83,7 +83,11 @@ mos_download:
    -  name: "SPIN-OFF EM BUG 25915038 - TNS-12599 ERRORS IN 12.2 DB ALERT.LOG"
       number: 26933408
       mos_regexp: 11119
-      mos_platform: 46P     
+      mos_platform: 46P 
+   -  name: "MERGE REQUEST ON TOP OF 11.1.1.9.0 FOR BUGS 31985571 33505402"
+      number: 34330735
+      mos_regexp: 11119
+      mos_platform: 46P      
 # Webtier
    -  name: "WLS PROXY PLUG-IN FOR OHS 11.1.1.9.0 SPU FOR APRCPU2021"
       number: 33144848
@@ -156,9 +160,9 @@ adop_patch:
    # - phase_name: ebs_start
    #   phase_options: ""
    #   fs_edition: run
-   - phase_name: ebs_autoconfig
-     phase_options: ""
-     fs_edition: run
+   # - phase_name: ebs_autoconfig
+   #   phase_options: ""
+   #   fs_edition: run
    # - phase_name: prepare
    #   phase_options: ""
    #   fs_edition: run
@@ -181,8 +185,11 @@ adop_patch:
    #   phase_options: "patches=26933408"
    #   fs_edition: patch
    # - phase_name: ebs_oracle_common_apply
-   #   phase_options: "patches=p26933408_111190_Generic.zip"
+   #   phase_options: "patches=p34330735_111190_Generic.zip"
    #   fs_edition: patch
+   # - phase_name: ebs_oracle_common_apply_oui
+   #   phase_options: "patches=p34330735_111190_Generic.zip"
+   #   fs_edition: patch     
    # - phase_name: ebs_oracle_webtier_rollback
    #   phase_options: "patches=33144848"
    #   fs_edition: patch
@@ -198,8 +205,9 @@ adop_patch:
    # - phase_name: apply
    #   phase_options: "patches="
    #   fs_edition: run
-   # - phase_name: prepare
+   # - phase_name: finalize
    #   phase_options: ""
    #   fs_edition: run
-
-
+   - phase_name: ebs_etcc
+     phase_options: "patches=p17537119_R12_GENERIC.zip"
+     fs_edition: run
