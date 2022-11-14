@@ -1,0 +1,22 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+export ORACLE_SID={{ oracle_sid }}
+export ORACLE_BASE={{ oracle_base }}
+export ORACLE_HOME={{ oracle_home }}
+export LISTENER={{ listener_name }}
+
+# extra variables
+export PATH=$ORACLE_HOME/bin:$PATH
+
+echo "## Patching 19c: database : ${ORACLE_SID} on $(hostname): datapatch"
+date
+
+echo "## OPatch checks"
+$ORACLE_HOME/OPatch/opatch version
+
+cd ${ORACLE_HOME}
+OPatch/datapatch -verbose
+
+echo "## task completed: Patching 19c:  database : ${ORACLE_SID} on $(hostname) : datapatch"
+date

@@ -1,14 +1,14 @@
-- name: Pushing OPatch apply script
+- name: Pushing datapatch apply script
   ansible.builtin.template:
-    src: 19c_rdbms_patch_opatch.sh.j2
-    dest: "{{ remote_bin }}/{{target}}_patch_opatch.sh"
+    src: 19c_rdbms_datapatch.sh.j2
+    dest: "{{ remote_bin }}/{{ env }}_{{target}}_19c_rdbms_datapatch.sh"
     mode: 0744
     force: yes
   with_items: "{{ remote_bin }}"
 
 - name: Execute Oracle OPATCH patching script
   ansible.builtin.shell: 
-    sudo su - {{ soft_user }} -c "sh {{ remote_bin }}/{{target}}_patch_opatch.sh | tee -a {{ remote_logs }}/{{target}}_patch_opatch_$(date '+%Y%m%d_%H%M%S').log"
+    sudo su - {{ soft_user }} -c "sh {{ remote_bin }}/{{ env }}_{{target}}_19c_rdbms_datapatch.sh | tee -a {{ remote_logs }}/{{ env }}_{{target}}_19c_rdbms_datapatch.log"
   register: reg_output
 
 - name: Print return information from the previous task

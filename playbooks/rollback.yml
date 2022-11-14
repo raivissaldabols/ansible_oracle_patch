@@ -1,5 +1,4 @@
-
-# Patching Playbook
+# Rollback playbook
 - hosts: all
   tasks:
     - name: SetVars
@@ -11,7 +10,7 @@
         prompt: "Please verify Environment Variables printed above, type yes to confirm"
       register: confirm_env
 
-    - name: Initiate Patching
+    - name: Initiate Rollback
       include_role:
-        name: 19c_rdbms_patch_oh
+        name: rollback
       when: confirm_env.user_input | bool

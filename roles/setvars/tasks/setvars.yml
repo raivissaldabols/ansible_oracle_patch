@@ -20,6 +20,14 @@
         - "../../../vars/{{ env }}/{{ target }}.yml"
       skip: True
 
+
+- name: "Load target variables if present for EBS"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "../../../vars/{{ env }}/ebs122_{{ target }}.yml"
+      skip: True
+
 - name: "Load Patching Scenario / Cycle"
   include_vars: "{{ item }}"
   with_first_found:

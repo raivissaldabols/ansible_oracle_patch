@@ -103,14 +103,54 @@ rdbms_conflict_check_list:
   - 33912892
   - 23727148
 
+# rdbms_rollback_list
+rdbms_rollback_list:
+  - 20181016 
+  - 21321429 
+  - 21967332 
+  - 28653113 
+  - 32901495 
+  - 33569841 
+  - 33649800 
+  - 25305405
+  - 21322448
+
 # Second list will be describing apply/rollback
 db_19c_rdbms_opatch:
    -  name: Opatch 19c
       number: 6880880
-      mos_regexp: 190
-      mos_platform: 226P
+      mos_regexp: 122
+
 
 db_19c_rdbms_rollback_list:
+   -  name: "Database PSU 12.1.0.2.220719 Patch 34057742 for UNIX"
+      number: 34057742
+      mos_regexp:
+   -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
+      number: 34086863
+      mos_regexp:
+   -  name: "JDK7u351Patch 34113570"
+      number: 34113570
+      mos_regexp:
+   -  name: "Perl Patch 33912892"
+      number: 33912892
+      mos_regexp: 
+
+db_19c_rdbms_apply_list:
+   -  name: "Database PSU 12.1.0.2.220719 Patch 34057742 for UNIX"
+      number: 34057742
+      mos_regexp:
+   -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
+      number: 34086863
+      mos_regexp:
+   -  name: "JDK7u351Patch 34113570"
+      number: 34113570
+      mos_regexp:
+   -  name: "Perl Patch 33912892"
+      number: 33912892
+      mos_regexp: 
+
+datapatch_required: true
    -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
       number: 34086863
 
