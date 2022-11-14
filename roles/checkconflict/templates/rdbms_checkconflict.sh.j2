@@ -12,6 +12,7 @@ echo "Version of opatch binary is:"
 {{ oracle_home }}/OPatch/opatch version
 
 ## Check conflicts with {{ oracle_home }} per list
+{% if rdbms_conflict_check_list %}
 {% for item in rdbms_conflict_check_list %}
 cd {{ remote_stage }}/{{ cycle }}
 echo "=========================================================="
@@ -21,6 +22,7 @@ cd {{ item }}
 echo "Checking conflict for patch {{ item }} against {{ oracle_home }}"
 {{ oracle_home }}/OPatch/opatch prereq CheckConflictAgainstOHWithDetail -ph ./
 {% endfor %}
+{% endif %}
 
 ## End time
 date

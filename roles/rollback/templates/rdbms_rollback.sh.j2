@@ -28,11 +28,13 @@ echo " ## exit if Oracle running"
 ## Rollback
 echo ""
 echo "## Rollback patches per list"
+{% if rdbms_rollback_list %}
 {% for item in rdbms_rollback_list %}
 export patch={{ item }}
 echo "## rollback patch: ${patch}"
 $ORACLE_HOME/OPatch/opatch rollback -id ${patch} -silent
 {% endfor %}
+{% endif %}
 
 echo "## OPatch checks"
 $ORACLE_HOME/OPatch/opatch lsinv | grep applied

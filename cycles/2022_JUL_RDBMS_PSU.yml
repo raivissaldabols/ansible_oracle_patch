@@ -96,34 +96,37 @@ db_19c_rdbms_opatch:
    -  name: Opatch 19c
       number: 6880880
       mos_regexp: 122
-      mos_platform: 226P
+
 
 db_19c_rdbms_rollback_list:
-   # -  name: "APPSST19C: XTTS PDB - TABLE IMPORT/CREATION FAILED WITH ORA-39083 ORA-14334"
-   #    number: 31424070
+   -  name: "Database PSU 12.1.0.2.220719 Patch 34057742 for UNIX"
+      number: 34057742
+      mos_regexp:
+   -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
+      number: 34086863
+      mos_regexp:
+   -  name: "JDK7u351Patch 34113570"
+      number: 34113570
+      mos_regexp:
+   -  name: "Perl Patch 33912892"
+      number: 33912892
+      mos_regexp: 
 
 db_19c_rdbms_apply_list:
    -  name: "Database PSU 12.1.0.2.220719 Patch 34057742 for UNIX"
       number: 34057742
       mos_regexp:
-      mos_platform: 226P
-   # -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
-   #    number: 34086863
-   #    mos_regexp:
-   #    mos_platform: 226P
-   # -  name: "JDK7u351Patch 34113570"
-   #    number: 34113570
-   #    mos_regexp:
-   #    mos_platform: 226P
-   # -  name: "Perl Patch 33912892"
-   #    number: 33912892
-   #    mos_regexp: 
-   #    mos_platform: 226P
-   # -  name: "Oracle JavaVM Component Database PSU - Generic JDBC 12.1.0.2.160719 Patch 23727148"
-   #    number: 23727148
-   #    mos_regexp: 
-   #    mos_platform: 226P
+   -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
+      number: 34086863
+      mos_regexp:
+   -  name: "JDK7u351Patch 34113570"
+      number: 34113570
+      mos_regexp:
+   -  name: "Perl Patch 33912892"
+      number: 33912892
+      mos_regexp: 
 
+datapatch_required: true
 
 # ADOP
 adop_patch:

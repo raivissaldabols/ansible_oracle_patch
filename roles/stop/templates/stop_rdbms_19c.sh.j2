@@ -1,7 +1,5 @@
 #!/bin/bash
-
-# this is anisble patching framework created file
-# roles/template/patch_opatch.sh
+# {{ ansible_managed }}
 
 # setting variables / replaced by ansible variables
 
@@ -19,12 +17,9 @@ date
 sqlplus -s / as sysdba << !
 set pages 1000 lines 1000 tab off
 select INSTANCE_NUMBER, INSTANCE_NAME, HOST_NAME, VERSION, STARTUP_TIME, STATUS, ARCHIVER, DATABASE_STATUS, INSTANCE_ROLE from v\$instance;
-
 col name for a50
-select CON_ID, NAME, OPEN_MODE, OPEN_TIME from v\$pdbs;
-
+--select CON_ID, NAME, OPEN_MODE, OPEN_TIME from v\$pdbs;
 shut immediate
-
 !
 
 echo "## stopping listener: ${LISTENER} on $(hostname)"

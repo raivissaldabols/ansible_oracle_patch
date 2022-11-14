@@ -1,4 +1,4 @@
-- name: Pushing OPatch apply script
+- name: Pushing database patching script
   ansible.builtin.template:
     src: 19c_rdbms_patch_oh.sh.j2
     dest: "{{ remote_bin }}/{{ env }}_{{target}}_19c_rdbms_patch_oh.sh"
@@ -6,7 +6,7 @@
     force: yes
   with_items: "{{ remote_bin }}"
 
-- name: Execute Oracle OPATCH patching script
+- name: Execute Oracle database patching script
   ansible.builtin.shell: 
     sudo su - {{ soft_user }} -c "sh {{ remote_bin }}/{{ env }}_{{target}}_19c_rdbms_patch_oh.sh | tee -a {{ remote_logs }}/{{ env }}_{{target}}_$(date '+%Y%m%d_%H%M%S')_19c_rdbms_patch_oh.log"
   register: reg_output

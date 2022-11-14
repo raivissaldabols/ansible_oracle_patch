@@ -19,11 +19,13 @@ $ORACLE_HOME/OPatch/opatch lspatches
 $ORACLE_HOME/OPatch/opatch lsinv | grep applied
 
 # check if OH busy
-# echo " ## exit if Oracle running"
-# if [[ $(fuser $ORACLE_HOME/bin/oracle) != '' ]]; then 
-# 	echo "$ORACLE_HOME: seems to be up - existing now"; 
-# 	exit 1;
-# fi
+echo " ## exit if Oracle running"
+ if [[ $(lsof +D $ORACLE_HOME | wc -l) != 0 ]]; then 
+ 	echo "$ORACLE_HOME: seems to be up - exiting now"; 
+  echo "Following processes are running in $ORACLE_HOME:"
+  lsof +D $ORACLE_HOME
+ 	exit 1;
+ fi
 
 ## Rollback
 echo ""
@@ -38,6 +40,7 @@ $ORACLE_HOME/OPatch/opatch rollback -id ${patch} -silent
 
 echo ""
 echo "## Apply patches per list"
+{% if db_19c_rdbms_rollback_list %}
 {% for item in db_19c_rdbms_apply_list %}
 export patch={{ item.number }}
 export patch_pattern={{ item.mos_regexp }}
@@ -51,13 +54,14 @@ if [ -d "{{ item.number }}" ];
  else
    cd ${STAGE_DIR}
    echo "Unzipping patch"
-   unzip p${patch}*${patch_pattern}*.zip
+   unzip -qo p${patch}*${patch_pattern}*.zip
    echo "Applying Patch"
    cd {{ item.number }}
    $ORACLE_HOME/OPatch/opatch apply -silent    
 fi
 # $ORACLE_HOME/OPatch/opatch apply -silent ${STAGE_DIR}/p${patch}*${patch_pattern}*.zip
 {% endfor %}
+{% endif %}
 
 echo "## OPatch checks"
 $ORACLE_HOME/OPatch/opatch lsinv | grep applied
