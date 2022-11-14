@@ -18,3 +18,5 @@
     - "Target                     :  {{ target }}"
     - "Cycle                      :  {{ cycle }}"
     - "Target Host Name           :  {{ inventory_hostname }}"
+
+- include_tasks: "ansible_dirs.yml"

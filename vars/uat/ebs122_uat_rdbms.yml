@@ -14,4 +14,7 @@ oracle_sid: UAT
 # listener_name
 listener_name: UAT
 
-# TBD : Database version?
+# TBD : Database version
+environment_file: /home/oracle/UAT_dbuataws.env
+oracle_sid: UAT
+listener_name: UAT

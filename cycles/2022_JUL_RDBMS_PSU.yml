@@ -70,6 +70,30 @@ mos_download:
       number: 34170410
       mos_regexp: 
       mos_platform: 46P
+   -  name: "ETCC"
+      number: 17537119
+      mos_regexp: 
+      mos_platform: 226P
+# WlS 
+   -  name: "ADR FOR WEBLOGIC SERVER 10.3.6 JULY CPU 2020"
+      number: 31241365
+      mos_regexp: 
+      mos_platform: 46P
+# Oracle Common      
+   -  name: "SPIN-OFF EM BUG 25915038 - TNS-12599 ERRORS IN 12.2 DB ALERT.LOG"
+      number: 26933408
+      mos_regexp: 11119
+      mos_platform: 46P     
+# Webtier
+   -  name: "WLS PROXY PLUG-IN FOR OHS 11.1.1.9.0 SPU FOR APRCPU2021"
+      number: 33144848
+      mos_regexp: 
+      mos_platform: 226P   
+# OH_10.1.2
+   -  name: "MERGE REQUEST ON TOP OF 10.1.2.3.2PSU FOR BUGS 26825525 25790854 32878968"
+      number: 32922089
+      mos_regexp: 
+      mos_platform: 46P   
 
 # RDBMS Check Conflict list
 rdbms_conflict_check_list:
@@ -127,34 +151,95 @@ db_19c_rdbms_apply_list:
       mos_regexp: 
 
 datapatch_required: true
+   -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
+      number: 34086863
 
-# ADOP
+db_19c_rdbms_apply_list:
+   -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
+      number: 34086863
+      file: p34086863_121020_Linux-x86-64.zip
+
+
+### LD (luke) RDBMS patching automation
+ld_rdbms_rollback_list:
+   -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
+      number: 34086863
+   -  name: "Database PSU 12.1.0.2.220719 Patch 34057742 for UNIX"
+      number: 34057742
+
+ld_rdbms_apply_list:
+   -  name: "Oracle JavaVM Component Database PSU 12.1.0.2.220719 Patch 34086863 for UNIX"
+      number: 34086863
+      file: p34086863_121020_Linux-x86-64.zip
+   -  name: "Database PSU 12.1.0.2.220719 Patch 34057742 for UNIX"
+      number: 34057742
+      file: p34057742_121020_Linux-x86-64.zip
+
+# ADOP phases
+# available adop_patch functions
+# --
+# jdk_32bit_patch
+# jdk_64bit_patch
+# wls_1036_apply
+# wls_1036_rollback
+# ebs_oracle_common_apply
+# ebs_oracle_common_rollback
+# ebs_oracle_webtier_apply
+# ebs_oracle_webtier_rollback
+# ebs_oh1012_apply
+# ebs_oh1012_rollback
+
 adop_patch:
+   # - phase_name: ebs_stop
+   #   phase_options: ""
+   #   fs_edition: run
+   # - phase_name: ebs_start
+   #   phase_options: ""
+   #   fs_edition: run
+   - phase_name: ebs_autoconfig
+     phase_options: ""
+     fs_edition: run
    # - phase_name: prepare
    #   phase_options: ""
    #   fs_edition: run
    # - phase_name: apply
-   #   phase_options: "patches=1234,3245 merge=yes"
+   #   phase_options: '"patches=34197137,34196316 merge=yes"'
    #   fs_edition: patch
-   - phase_name: jdk_32bit_patch
-     phase_options: "patches=p34170410_170351_LINUX.zip"
-     fs_edition: patch
-   - phase_name: jdk_64bit_patch
-     phase_options: "patches=p34170410_170351_Linux-x86-64.zip"
-     fs_edition: patch
-   # - phase_name: wls_bsu_patch
-   #   phase_options: "patches=1234"
+   # - phase_name: jdk_32bit_patch
+   #   phase_options: "patches=p34170410_170351_LINUX.zip"
    #   fs_edition: patch
-   # - phase_name: ohs_patch
-   #   phase_options: "patches=1234"
+   # - phase_name: jdk_64bit_patch
+   #   phase_options: "patches=p34170410_170351_Linux-x86-64.zip"
    #   fs_edition: patch
-   # - phase_name: finalise
+   # - phase_name: wls_1036_rollback
+   #   phase_options: "patches=CW7X"
+   #   fs_edition: patch
+   # - phase_name: wls_1036_apply
+   #   phase_options: "patches=p31241365_1036_LINUX.zip"
+   #   fs_edition: patch
+   # - phase_name: ebs_oracle_common_rollback
+   #   phase_options: "patches=26933408"
+   #   fs_edition: patch
+   # - phase_name: ebs_oracle_common_apply
+   #   phase_options: "patches=p26933408_111190_Generic.zip"
+   #   fs_edition: patch
+   # - phase_name: ebs_oracle_webtier_rollback
+   #   phase_options: "patches=33144848"
+   #   fs_edition: patch
+   # - phase_name: ebs_oracle_webtier_apply
+   #   phase_options: "patches=p33144848_111190_Linux-x86-64.zip"
+   #   fs_edition: patch
+   # - phase_name: ebs_oh1012_rollback
+   #   phase_options: "patches=32922089"
+   #   fs_edition: patch
+   # - phase_name: ebs_oh1012_apply
+   #   phase_options: "patches=p32922089_101232_LINUX.zip"
+   #   fs_edition: patch
+   # - phase_name: apply
+   #   phase_options: "patches="
+   #   fs_edition: run
+   # - phase_name: prepare
    #   phase_options: ""
    #   fs_edition: run
 
-adop_downtime:
-   - phase_name: ebs_stop
-   - phase_name: cutover
-   - phase_name: ebs_start
-   - phase_name: fs_clone
-   - phase_name: clenaup
+
