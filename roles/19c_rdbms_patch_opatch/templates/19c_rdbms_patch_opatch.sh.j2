@@ -1,9 +1,5 @@
 #!/bin/bash
-
-# this is anisble patching framework created file
-# roles/template/patch_opatch.sh
-
-# setting variables / replaced by ansible variables
+# {{ ansible_managed }}
 
 export ORACLE_SID={{ oracle_sid }}
 export ORACLE_BASE={{ oracle_base }}
@@ -24,7 +20,7 @@ date
 
 cd $ORACLE_HOME/
 curr_date=$(date '+%Y%m%d_%H%M%S')
-echo "## listing existong OPatch"
+echo "## listing existing OPatch"
 ls -l | grep OPatch
 
 echo "## OPatch version"

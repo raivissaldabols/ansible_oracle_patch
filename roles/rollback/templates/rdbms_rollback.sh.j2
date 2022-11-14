@@ -1,0 +1,43 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+export ORACLE_SID={{ oracle_sid }}
+export ORACLE_BASE={{ oracle_base }}
+export ORACLE_HOME={{ oracle_home }}
+export LISTENER={{ listener_name }}
+export STAGE_DIR={{ remote_stage }}/{{ cycle }} ## note staging through cycles
+
+# extra variables
+export PATH=$ORACLE_HOME/bin:$PATH
+
+echo "## Rollback : database : ${ORACLE_SID} on $(hostname)"
+date
+
+echo "## OPatch checks"
+$ORACLE_HOME/OPatch/opatch version
+$ORACLE_HOME/OPatch/opatch lspatches
+$ORACLE_HOME/OPatch/opatch lsinv | grep applied
+
+# check if OH busy
+echo " ## exit if Oracle running"
+#if [[ $(fuser $ORACLE_HOME/bin/oracle) != '' ]]; then 
+#	echo "$ORACLE_HOME: seems to be up - exiting now"; 
+#	exit 1;
+#fi
+
+## Rollback
+echo ""
+echo "## Rollback patches per list"
+{% if rdbms_rollback_list %}
+{% for item in rdbms_rollback_list %}
+export patch={{ item }}
+echo "## rollback patch: ${patch}"
+$ORACLE_HOME/OPatch/opatch rollback -id ${patch} -silent
+{% endfor %}
+{% endif %}
+
+echo "## OPatch checks"
+$ORACLE_HOME/OPatch/opatch lsinv | grep applied
+
+echo "## task completed: Rollback :  database : ${ORACLE_SID} on $(hostname)"
+date
