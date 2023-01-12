@@ -1,3 +1,7 @@
+# Note: 2023jan - this is obsolete verison of patch automation attempt
+ - proven not work good in real world for various reasons
+ - working on improved version in: https://github.com/raivissaldabols/ansible_ebs_patch
+
 # Ansible Automation framework for Oracle product patching
 blame saldabols@pythian.com
 
